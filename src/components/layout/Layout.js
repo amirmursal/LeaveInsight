@@ -5,6 +5,7 @@ import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
 import AdminDashboard from "../admindashboard/AdminDashboard";
 import EmployeeDashboard from "../employeedashboard/EmployeeDashboard";
+import Profile from "../profile/Profile";
 
 export default class Layout extends React.Component {
   render() {
@@ -17,6 +18,8 @@ export default class Layout extends React.Component {
         <div className="page-wrapper">
           <Route path="/admindashboard" component={AdminDashboard} />
           <Route path="/employeedashboard" component={EmployeeDashboard} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/logout" component={Login} />
         </div>
       </div>
     ) : (

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Avatar from "../../assests/images/avatar.png";
 import HeaderLogo from "../../assests/images/header-logo.png";
 export default class Header extends React.Component {
@@ -41,15 +42,13 @@ export default class Header extends React.Component {
               <span>Admin</span>
             </a>
             <div className="dropdown-menu">
-              <a className="dropdown-item" href="profile.html">
+              <Link className="dropdown-item" to="/profile">
                 My Profile
-              </a>
-              <a className="dropdown-item" href="settings.html">
-                Settings
-              </a>
-              <a className="dropdown-item" href="login.html">
+              </Link>
+
+              <Link className="dropdown-item" to="/login">
                 Logout
-              </a>
+              </Link>
             </div>
           </li>
         </ul>
@@ -64,15 +63,12 @@ export default class Header extends React.Component {
             <i className="fa fa-ellipsis-v"></i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="profile.html">
+            <Link className="dropdown-item" to="/profile">
               My Profile
-            </a>
-            <a className="dropdown-item" href="settings.html">
-              Settings
-            </a>
-            <a className="dropdown-item" href="login.html">
+            </Link>
+            <Link className="dropdown-item" to="/login">
               Logout
-            </a>
+            </Link>
           </div>
         </div>
       </div>

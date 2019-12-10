@@ -1,8 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../../config";
 import Avatar from "../../assests/images/avatar.png";
 
 export default class Profile extends React.Component {
+  getProfileInfo = () => {
+    const userId = JSON.parse(localStorage.getItem("UserId"));
+    axios
+      .get(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/GetEmployeeInformation/" +
+          userId
+      )
+      .then(response => {
+        if (response.data !== null) {
+          console.log(response.data);
+        } else {
+          this.setState({
+            error: true
+          });
+        }
+      })
+      .catch(error => {
+        this.setState({
+          error: true
+        });
+        console.log(error);
+      });
+  };
+  componentDidMount() {
+    this.getProfileInfo();
+  }
   render() {
     return (
       <div className="content container-fluid">
@@ -27,7 +57,7 @@ export default class Profile extends React.Component {
                 <div className="profile-view">
                   <div className="profile-img-wrap">
                     <div className="profile-img">
-                      <a href="#ChangeThis">
+                      <a href="#">
                         <img alt="" src={Avatar} />
                       </a>
                     </div>

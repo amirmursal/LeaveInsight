@@ -3,16 +3,21 @@ import { Link } from "react-router-dom";
 import Avatar from "../../assests/images/avatar.png";
 import HeaderLogo from "../../assests/images/header-logo.png";
 export default class Header extends React.Component {
+  logout = () => {
+    localStorage.removeItem("TokenId");
+    localStorage.removeItem("UserId");
+    this.props.history.push("/login");
+  };
   render() {
     return (
       <div className="header">
         <div className="header-left">
-          <a href="index.html" className="logo">
+          <a href="#" className="logo">
             <img src={HeaderLogo} alt="" height="50" />
           </a>
         </div>
 
-        <a id="toggle_btn" href="#ChangeThis">
+        <a id="toggle_btn" href="#">
           <span className="bar-icon">
             <span></span>
             <span></span>
@@ -31,7 +36,7 @@ export default class Header extends React.Component {
         <ul className="nav user-menu">
           <li className="nav-item dropdown has-arrow main-drop">
             <a
-              href="#ChangeThis"
+              href="#"
               className="dropdown-toggle nav-link"
               data-toggle="dropdown"
             >
@@ -46,16 +51,16 @@ export default class Header extends React.Component {
                 My Profile
               </Link>
 
-              <Link className="dropdown-item" to="/login">
+              <div className="dropdown-item" onClick={() => this.logout()}>
                 Logout
-              </Link>
+              </div>
             </div>
           </li>
         </ul>
 
         <div className="dropdown mobile-user-menu">
           <a
-            href="#ChangeThis"
+            href="#"
             className="nav-link dropdown-toggle"
             data-toggle="dropdown"
             aria-expanded="false"
@@ -66,9 +71,9 @@ export default class Header extends React.Component {
             <Link className="dropdown-item" to="/profile">
               My Profile
             </Link>
-            <Link className="dropdown-item" to="/login">
+            <div className="dropdown-item" onClick={() => this.logout()}>
               Logout
-            </Link>
+            </div>
           </div>
         </div>
       </div>

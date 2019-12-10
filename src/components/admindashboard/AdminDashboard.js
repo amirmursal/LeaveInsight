@@ -315,7 +315,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0001</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Global Technologies</a></h2>
+															<h2><a href="#">Global Technologies</a></h2>
 														</td>
 														<td>11 Mar 2019</td>
 														<td>$380</td>
@@ -326,7 +326,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0002</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Delta Infotech</a></h2>
+															<h2><a href="#">Delta Infotech</a></h2>
 														</td>
 														<td>8 Feb 2019</td>
 														<td>$500</td>
@@ -337,7 +337,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0003</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Cream Inc</a></h2>
+															<h2><a href="#">Cream Inc</a></h2>
 														</td>
 														<td>23 Jan 2019</td>
 														<td>$60</td>
@@ -375,7 +375,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0001</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Global Technologies</a></h2>
+															<h2><a href="#">Global Technologies</a></h2>
 														</td>
 														<td>Paypal</td>
 														<td>11 Mar 2019</td>
@@ -384,7 +384,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0002</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Delta Infotech</a></h2>
+															<h2><a href="#">Delta Infotech</a></h2>
 														</td>
 														<td>Paypal</td>
 														<td>8 Feb 2019</td>
@@ -393,7 +393,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td><a href="invoice-view.html">#INV-0003</a></td>
 														<td>
-															<h2><a href="#ChangeThis">Cream Inc</a></h2>
+															<h2><a href="#">Cream Inc</a></h2>
 														</td>
 														<td>Paypal</td>
 														<td>23 Jan 2019</td>
@@ -431,7 +431,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td>
 															<h2 className="table-avatar">
-																<a href="#ChangeThis" className="avatar"><img alt="" src="assets/img/profiles/avatar-19.jpg" /></a>
+																<a href="#" className="avatar"><img alt="" src="assets/img/profiles/avatar-19.jpg" /></a>
 																<a href="client-profile.html">Barry Cuda <span>CEO</span></a>
 															</h2>
 														</td>
@@ -442,8 +442,9 @@ export default class AdminDashboard extends React.Component {
 																	<i className="fa fa-dot-circle-o text-success"></i> Active
 															</a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
+																	<a className="dropdown-item" href="#
+																	"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
 																</div>
 															</div>
 														</td>
@@ -451,8 +452,8 @@ export default class AdminDashboard extends React.Component {
 															<div className="dropdown dropdown-action">
 																<a href="#ChangeThis" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-pencil m-r-5"></i> Edit</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
 																</div>
 															</div>
 														</td>
@@ -460,7 +461,7 @@ export default class AdminDashboard extends React.Component {
 													<tr>
 														<td>
 															<h2 className="table-avatar">
-																<a href="#ChangeThis" className="avatar"><img alt="" src="assets/img/profiles/avatar-19.jpg" /></a>
+																<a href="#" className="avatar"><img alt="" src="assets/img/profiles/avatar-19.jpg" /></a>
 																<a href="client-profile.html">Tressa Wexler <span>Manager</span></a>
 															</h2>
 														</td>
@@ -471,17 +472,17 @@ export default class AdminDashboard extends React.Component {
 																	<i className="fa fa-dot-circle-o text-danger"></i> Inactive
 															</a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
 																</div>
 															</div>
 														</td>
 														<td className="text-right">
 															<div className="dropdown dropdown-action">
-																<a href="#ChangeThis" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+																<a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-pencil m-r-5"></i> Edit</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
 																</div>
 															</div>
 														</td>
@@ -500,17 +501,17 @@ export default class AdminDashboard extends React.Component {
 																	<i className="fa fa-dot-circle-o text-danger"></i> Inactive
 															</a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
 																</div>
 															</div>
 														</td>
 														<td className="text-right">
 															<div className="dropdown dropdown-action">
-																<a href="#ChangeThis" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+																<a href="#" className="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-pencil m-r-5"></i> Edit</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-pencil m-r-5"></i> Edit</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-trash-o m-r-5"></i> Delete</a>
 																</div>
 															</div>
 														</td>
@@ -529,8 +530,8 @@ export default class AdminDashboard extends React.Component {
 																	<i className="fa fa-dot-circle-o text-success"></i> Active
 															</a>
 																<div className="dropdown-menu dropdown-menu-right">
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
-																	<a className="dropdown-item" href="#ChangeThis"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success"></i> Active</a>
+																	<a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger"></i> Inactive</a>
 																</div>
 															</div>
 														</td>

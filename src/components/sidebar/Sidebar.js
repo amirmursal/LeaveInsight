@@ -9,7 +9,7 @@ export default class Sidebar extends React.Component {
         <div className="sidebar-inner slimscroll">
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
-              <li className="menu-title">
+              {/*<li className="menu-title">
                 <span>Main</span>
               </li>
               <li className="submenu">
@@ -28,7 +28,7 @@ export default class Sidebar extends React.Component {
                   </li>
                 </ul>
               </li>
-              {/*<li className="submenu">
+              <li className="submenu">
                 <a href="#ChangeThis">
                   <i className="la la-cube"></i> <span> Apps</span>{" "}
                   <span className="menu-arrow"></span>
@@ -69,17 +69,17 @@ export default class Sidebar extends React.Component {
                     <a href="file-manager.html">File Manager</a>
                   </li>
                 </ul>
-              </li>*/}
-              <li className="menu-title">
-                <span>Employees</span>
               </li>
+              <li className="menu-title">
+                <span>Employee</span>
+              </li>*/}
               <li className="submenu">
                 <a href="#ChangeThis" className="noti-dot">
-                  <i className="la la-user"></i> <span> Employees</span>{" "}
+                  <i className="la la-user"></i> <span> Employee</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>
                 <ul style={{ display: "none" }}>
-                  <li>
+                  {/*<li>
                     <a href="employees.html">All Employees</a>
                   </li>
                   <li>
@@ -87,14 +87,14 @@ export default class Sidebar extends React.Component {
                   </li>
                   <li>
                     <a href="leaves.html">
-                      Leaves (Admin){" "}
+                      Leaves (Reportee ){" "}
                       <span className="badge badge-pill bg-primary float-right">
                         1
                       </span>
                     </a>
-                  </li>
+                  </li>*/}
                   <li>
-                    <a href="leaves-employee.html">Leaves (Employee)</a>
+                    <Link to="/myleaves">My Leaves</Link>
                   </li>
                   {/*<li>
                     <a href="leave-settings.html">Leave Settings</a>

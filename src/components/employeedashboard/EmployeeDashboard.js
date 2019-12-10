@@ -25,7 +25,7 @@ export default class EmployeeDashboard extends React.Component {
               <h1 className="dash-sec-title">Today</h1>
               <div className="dash-sec-content">
                 <div className="dash-info-list">
-                  <a href="#Changethis" className="dash-card text-danger">
+                  <a href="#" className="dash-card text-danger">
                     <div className="dash-card-container">
                       <div className="dash-card-icon">
                         <i className="fa fa-hourglass-o"></i>
@@ -43,7 +43,7 @@ export default class EmployeeDashboard extends React.Component {
                 </div>
 
                 <div className="dash-info-list">
-                  <a href="#Changethis" className="dash-card">
+                  <a href="#" className="dash-card">
                     <div className="dash-card-container">
                       <div className="dash-card-icon">
                         <i className="fa fa-suitcase"></i>
@@ -61,7 +61,7 @@ export default class EmployeeDashboard extends React.Component {
                 </div>
 
                 <div className="dash-info-list">
-                  <a href="#Changethis" className="dash-card">
+                  <a href="#" className="dash-card">
                     <div className="dash-card-container">
                       <div className="dash-card-icon">
                         <i className="fa fa-building-o"></i>
@@ -93,10 +93,10 @@ export default class EmployeeDashboard extends React.Component {
                         <p>2 people will be away tomorrow</p>
                       </div>
                       <div className="dash-card-avatars">
-                        <a href="#Changethis" className="e-avatar">
+                        <a href="#" className="e-avatar">
                           <img src="assets/img/profiles/avatar-04.jpg" alt="" />
                         </a>
-                        <a href="#Changethis" className="e-avatar">
+                        <a href="#" className="e-avatar">
                           <img src="assets/img/profiles/avatar-08.jpg" alt="" />
                         </a>
                       </div>
@@ -119,10 +119,10 @@ export default class EmployeeDashboard extends React.Component {
                         <p>2 people are going to be away</p>
                       </div>
                       <div className="dash-card-avatars">
-                        <a href="#Changethis" className="e-avatar">
+                        <a href="#" className="e-avatar">
                           <img src="assets/img/profiles/avatar-05.jpg" alt="" />
                         </a>
-                        <a href="#Changethis" className="e-avatar">
+                        <a href="#" className="e-avatar">
                           <img src="assets/img/profiles/avatar-07.jpg" alt="" />
                         </a>
                       </div>
@@ -147,7 +147,7 @@ export default class EmployeeDashboard extends React.Component {
                   </div>
                 </div>
                 <div className="dash-info-list">
-                  <a href="#Changethis" className="dash-card">
+                  <a href="#" className="dash-card">
                     <div className="dash-card-container">
                       <div className="dash-card-icon">
                         <i className="fa fa-calendar"></i>
@@ -202,7 +202,7 @@ export default class EmployeeDashboard extends React.Component {
                       </div>
                     </div>
                     <div className="request-btn">
-                      <a className="btn btn-primary" href="#Changethis">
+                      <a className="btn btn-primary" href="#">
                         Apply Leave
                       </a>
                     </div>
@@ -224,7 +224,7 @@ export default class EmployeeDashboard extends React.Component {
                       </div>
                     </div>
                     <div className="request-btn">
-                      <a className="btn btn-primary" href="#Changethis">
+                      <a className="btn btn-primary" href="#">
                         Apply Time Off
                       </a>
                     </div>

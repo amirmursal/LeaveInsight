@@ -74,7 +74,7 @@ export default class Sidebar extends React.Component {
                 <span>Employee</span>
               </li>*/}
               <li className="submenu">
-                <a href="#ChangeThis" className="noti-dot">
+                <a href="" className="noti-dot">
                   <i className="la la-user"></i> <span> Employee</span>{" "}
                   <span className="menu-arrow"></span>
                 </a>

@@ -44,7 +44,7 @@ export default class Header extends React.Component {
                 <img src={Avatar} alt="" />
                 <span className="status online"></span>
               </span>
-              <span>Admin</span>
+              <span></span>
             </a>
             <div className="dropdown-menu">
               <Link className="dropdown-item" to="/profile">

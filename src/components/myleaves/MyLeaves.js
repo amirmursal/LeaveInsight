@@ -1,8 +1,87 @@
 import React from "react";
 import axios from "axios";
+import moment from "moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { serverUrl } from "../../config";
 
+const TokenId = JSON.parse(localStorage.getItem("TokenId"));
 export default class MyLeaves extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      //EmployeeID: 50368,
+      ProjectID: 1118,
+      ClientDescription: "",
+      Duration: 8,
+      StartDate: new Date()
+    };
+  }
+
+  handleDateChange = date => {
+    this.setState({
+      StartDate: date
+    });
+  };
+
+  // common input change handler for input and select
+  handleChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
+
+  leaveRequest = () => {
+    let data = {
+      ID: -1,
+      EntityName: "Hours",
+      TaskDefinitionID: 178,
+      //EmployeeID: 50368,
+      ProjectID: this.state.ProjectID,
+      ClientDescription: this.state.ClientDescription,
+      Duration: this.state.Duration,
+      StartDate: moment(this.state.StartDate).format("DD/MM/YYYY")
+    };
+    axios
+      .post(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+        data,
+        {
+          headers: {
+            AptifyAuthorization: TokenId,
+            "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        if (response.data !== null) {
+          console.log(response.data);
+        } else {
+          this.setState({
+            ProjectID: 1118,
+            ClientDescription: "",
+            Duration: 8,
+            StartDate: new Date(),
+            error: true
+          });
+        }
+      })
+      .catch(error => {
+        this.setState({
+          ProjectID: 1118,
+          ClientDescription: "",
+          Duration: 8,
+          StartDate: new Date(),
+          error: true
+        });
+        console.log(error);
+      });
+
+    console.log(data);
+  };
+
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
     axios
@@ -10,7 +89,8 @@ export default class MyLeaves extends React.Component {
         " https://" +
           serverUrl +
           "/AptifyServicesAPI/services/GetEmployeeInformation/" +
-          userId
+          userId,
+        { headers: { AptifyAuthorization: TokenId } }
       )
       .then(response => {
         if (response.data !== null) {
@@ -28,10 +108,14 @@ export default class MyLeaves extends React.Component {
         console.log(error);
       });
   };
+
   componentDidMount() {
     this.getProfileInfo();
   }
+
   render() {
+    const { StartDate, ProjectID, ClientDescription, Duration } = this.state;
+
     return (
       <div className="content container-fluid">
         <div className="page-header">
@@ -40,7 +124,7 @@ export default class MyLeaves extends React.Component {
               <h3 className="page-title">Leaves</h3>
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <a href="index.html">Employee</a>
+                  <a href="">Employee</a>
                 </li>
                 <li className="breadcrumb-item active">My Leaves</li>
               </ul>
@@ -178,69 +262,66 @@ export default class MyLeaves extends React.Component {
                 </button>
               </div>
               <div className="modal-body">
-                <form>
-                  <div className="form-group">
-                    <label>
-                      Leave Type <span className="text-danger">*</span>
-                    </label>
-                    <select className="select">
-                      <option>Select Leave Type</option>
-                      <option>Casual Leave 12 Days</option>
-                      <option>Medical Leave</option>
-                      <option>Loss of Pay</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      From <span className="text-danger">*</span>
-                    </label>
-                    <div className="cal-icon">
-                      <input
-                        className="form-control datetimepicker"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      To <span className="text-danger">*</span>
-                    </label>
-                    <div className="cal-icon">
-                      <input
-                        className="form-control datetimepicker"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      Number of days <span className="text-danger">*</span>
-                    </label>
-                    <input className="form-control" readOnly type="text" />
-                  </div>
-                  <div className="form-group">
-                    <label>
-                      Remaining Leaves <span className="text-danger">*</span>
-                    </label>
-                    <input
+                <div className="form-group">
+                  <label>
+                    Leave Type <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-control"
+                    value={ProjectID}
+                    name="ProjectID"
+                    onChange={this.handleChange}
+                  >
+                    <option value="1118"> PTO</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Duration<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-control"
+                    value={Duration}
+                    name="Duration"
+                    onChange={this.handleChange}
+                  >
+                    <option value="8"> Full Day</option>
+                    <option value="4"> Half Day</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Date <span className="text-danger">*</span>
+                  </label>
+                  <div>
+                    <DatePicker
                       className="form-control"
-                      readOnly
-                      value="12"
-                      type="text"
+                      selected={StartDate}
+                      onChange={this.handleDateChange}
                     />
                   </div>
-                  <div className="form-group">
-                    <label>
-                      Leave Reason <span className="text-danger">*</span>
-                    </label>
-                    <textarea rows="4" className="form-control"></textarea>
-                  </div>
-                  <div className="submit-section">
-                    <button className="btn btn-primary submit-btn">
-                      Submit
-                    </button>
-                  </div>
-                </form>
+                </div>
+
+                <div className="form-group">
+                  <label>
+                    Leave Reason <span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    rows="4"
+                    name="ClientDescription"
+                    className="form-control"
+                    value={ClientDescription}
+                    onChange={this.handleChange}
+                  ></textarea>
+                </div>
+                <div className="submit-section">
+                  <button
+                    className="btn btn-primary submit-btn"
+                    onClick={() => this.leaveRequest()}
+                  >
+                    Submit
+                  </button>
+                </div>
               </div>
             </div>
           </div>

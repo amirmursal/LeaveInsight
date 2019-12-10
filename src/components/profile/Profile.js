@@ -7,12 +7,14 @@ import Avatar from "../../assests/images/avatar.png";
 export default class Profile extends React.Component {
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     axios
       .get(
         " https://" +
           serverUrl +
           "/AptifyServicesAPI/services/GetEmployeeInformation/" +
-          userId
+          userId,
+        { headers: { AptifyAuthorization: TokenId } }
       )
       .then(response => {
         if (response.data !== null) {

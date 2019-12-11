@@ -430,18 +430,15 @@ export default class MyLeaves extends React.Component {
                 <div className="modal-btn delete-action">
                   <div className="row">
                     <div className="col-6">
-                      <a
-                        href="javascript:void(0);"
-                        className="btn btn-primary continue-btn"
-                      >
+                      <a href="" className="btn btn-primary continue-btn">
                         Delete
                       </a>
                     </div>
-                    <div class="col-6">
+                    <div className="col-6">
                       <a
-                        className="javascript:void(0);"
+                        href=""
                         data-dismiss="modal"
-                        class="btn btn-primary cancel-btn"
+                        className="btn btn-primary cancel-btn"
                       >
                         Cancel
                       </a>

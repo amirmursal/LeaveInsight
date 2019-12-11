@@ -84,15 +84,15 @@ export default class Sidebar extends React.Component {
                   </li>
                   <li>
                     <a href="holidays.html">Holidays</a>
-                  </li>
+                  </li>*/}
                   <li>
-                    <a href="leaves.html">
+                    <Link to="/reporteeleaves">
                       Leaves (Reportee ){" "}
                       <span className="badge badge-pill bg-primary float-right">
                         1
                       </span>
-                    </a>
-                  </li>*/}
+                    </Link>
+                  </li>
                   <li>
                     <Link to="/myleaves">My Leaves</Link>
                   </li>

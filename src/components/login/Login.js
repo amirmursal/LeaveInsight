@@ -38,7 +38,6 @@ export default class Login extends React.Component {
           password: ""
         });
         if (response.data !== null) {
-          console.log(response.data);
           localStorage.setItem("UserId", JSON.stringify(response.data.UserId));
           localStorage.setItem(
             "TokenId",

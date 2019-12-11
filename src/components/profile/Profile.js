@@ -5,6 +5,12 @@ import { serverUrl } from "../../config";
 import Avatar from "../../assests/images/avatar.png";
 
 export default class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      employee: {}
+    };
+  }
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
@@ -14,11 +20,13 @@ export default class Profile extends React.Component {
           serverUrl +
           "/AptifyServicesAPI/services/GetEmployeeInformation/" +
           userId,
-        { headers: { AptifyAuthorization: TokenId } }
+        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
       )
       .then(response => {
         if (response.data !== null) {
-          console.log(response.data);
+          this.setState({
+            employee: response.data.Employee[0]
+          });
         } else {
           this.setState({
             error: true
@@ -32,10 +40,13 @@ export default class Profile extends React.Component {
         console.log(error);
       });
   };
+
   componentDidMount() {
     this.getProfileInfo();
   }
+
   render() {
+    const { employee } = this.state;
     return (
       <div className="content container-fluid">
         <div className="page-header">
@@ -68,12 +79,18 @@ export default class Profile extends React.Component {
                     <div className="row">
                       <div className="col-md-5">
                         <div className="profile-info-left">
-                          <h3 className="user-name m-t-0 mb-0">John Doe</h3>
-                          <h6 className="text-muted">UI/UX Design Team</h6>
-                          <small className="text-muted">Web Designer</small>
-                          <div className="staff-id">Employee ID : FT-0001</div>
+                          <h3 className="user-name m-t-0 mb-0">
+                            {employee.FirstLast}
+                          </h3>
+                          <h6 className="text-muted">R & D Team</h6>
+                          <small className="text-muted">
+                            Software Engineer- Front End Development
+                          </small>
+                          <div className="staff-id">
+                            Employee ID : {employee.EmpID}
+                          </div>
                           <div className="small doj text-muted">
-                            Date of Join : 1st Jan 2013
+                            Date of Join : 18<sup>th</sup> March 2019
                           </div>
                         </div>
                       </div>
@@ -82,18 +99,20 @@ export default class Profile extends React.Component {
                           <li>
                             <div className="title">Phone:</div>
                             <div className="text">
-                              <span>9876543210</span>
+                              <span>9881151316</span>
                             </div>
                           </li>
                           <li>
                             <div className="title">Email:</div>
                             <div className="text">
-                              <span>johndoe@example.com</span>
+                              <span>amir.mursal@communitybrands.com</span>
                             </div>
                           </li>
                           <li>
                             <div className="title">Birthday:</div>
-                            <div className="text">24th July</div>
+                            <div className="text">
+                              25<sup>th</sup> March
+                            </div>
                           </li>
 
                           <li>
@@ -104,7 +123,7 @@ export default class Profile extends React.Component {
                                   <img src={Avatar} alt="" />
                                 </div>
                               </div>
-                              <span>Jeffery Lalor</span>
+                              <span>Madhu Menon</span>
                             </div>
                           </li>
                         </ul>

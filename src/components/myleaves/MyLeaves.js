@@ -5,16 +5,17 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { serverUrl } from "../../config";
 
-const TokenId = JSON.parse(localStorage.getItem("TokenId"));
 export default class MyLeaves extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //EmployeeID: 50368,
+      AppliedLeaves: [],
+      EmpID: null,
       ProjectID: 1118,
-      ClientDescription: "",
-      Duration: 8,
-      StartDate: new Date()
+      Description: "",
+      WorkHours: 8,
+      StartDate: new Date(),
+      error: false
     };
   }
 
@@ -32,15 +33,18 @@ export default class MyLeaves extends React.Component {
   };
 
   leaveRequest = () => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: -1,
-      EntityName: "Hours",
-      TaskDefinitionID: 178,
-      //EmployeeID: 50368,
+      EntityName: "Employee Work Schedules",
+      Type: "Project",
+      Status: "Applied",
+      EmployeeID: parseInt(this.state.EmpID),
       ProjectID: this.state.ProjectID,
-      ClientDescription: this.state.ClientDescription,
-      Duration: this.state.Duration,
-      StartDate: moment(this.state.StartDate).format("DD/MM/YYYY")
+      Description: this.state.Description,
+      WorkHours: this.state.WorkHours,
+      StartDate: moment(this.state.StartDate).format("DD/MM/YYYY"),
+      EndDate: moment(this.state.StartDate).format("DD/MM/YYYY")
     };
     axios
       .post(
@@ -50,19 +54,27 @@ export default class MyLeaves extends React.Component {
         data,
         {
           headers: {
-            AptifyAuthorization: TokenId,
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
             "Content-Type": "application/json"
           }
         }
       )
       .then(response => {
         if (response.data !== null) {
-          console.log(response.data);
+          this.setState({
+            EmpID: null,
+            ProjectID: 1118,
+            Description: "",
+            WorkHours: 8,
+            StartDate: new Date(),
+            error: true
+          });
         } else {
           this.setState({
+            EmpID: null,
             ProjectID: 1118,
-            ClientDescription: "",
-            Duration: 8,
+            Description: "",
+            WorkHours: 8,
             StartDate: new Date(),
             error: true
           });
@@ -70,31 +82,39 @@ export default class MyLeaves extends React.Component {
       })
       .catch(error => {
         this.setState({
+          EmpID: null,
           ProjectID: 1118,
-          ClientDescription: "",
-          Duration: 8,
+          Description: "",
+          WorkHours: 8,
           StartDate: new Date(),
           error: true
         });
         console.log(error);
       });
-
-    console.log(data);
   };
 
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     axios
       .get(
         " https://" +
           serverUrl +
           "/AptifyServicesAPI/services/GetEmployeeInformation/" +
           userId,
-        { headers: { AptifyAuthorization: TokenId } }
+        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
       )
       .then(response => {
         if (response.data !== null) {
-          console.log(response.data);
+          /* localStorage.setItem(
+            "EmpID",
+            JSON.stringify(response.data.Employee[0].EmpID)
+          );*/
+          console.log(response.data.Employee[0]);
+          this.setState({
+            AppliedLeaves: response.data.Employee[0].AppliedLeaves,
+            EmpID: response.data.Employee[0].EmpID
+          });
         } else {
           this.setState({
             error: true
@@ -113,8 +133,51 @@ export default class MyLeaves extends React.Component {
     this.getProfileInfo();
   }
 
+  renderAppliedLeaves = () => {
+    return this.state.AppliedLeaves.map((element, i) => {
+      return (
+        <tr key={i}>
+          <td>{moment(element.StartDAt).format("DD/MM/YYYY")}</td>
+          <td>{element.Duration}</td>
+          <td>{element.ClientDescription}</td>
+
+          <td className="text-right">
+            <div className="dropdown dropdown-action">
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="material-icons">more_vert</i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#edit_leave"
+                >
+                  <i className="fa fa-pencil m-r-5"></i> Edit
+                </a>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  data-toggle="modal"
+                  data-target="#delete_approve"
+                >
+                  <i className="fa fa-trash-o m-r-5"></i> Delete
+                </a>
+              </div>
+            </div>
+          </td>
+        </tr>
+      );
+    });
+  };
+
   render() {
-    const { StartDate, ProjectID, ClientDescription, Duration } = this.state;
+    const { StartDate, ProjectID, Description, WorkHours } = this.state;
 
     return (
       <div className="content container-fluid">
@@ -151,13 +214,13 @@ export default class MyLeaves extends React.Component {
           </div>
           <div className="col-md-3">
             <div className="stats-info">
-              <h6>Medical Leave</h6>
+              <h6>Applied Leave</h6>
               <h4>3</h4>
             </div>
           </div>
           <div className="col-md-3">
             <div className="stats-info">
-              <h6>Other Leave</h6>
+              <h6>Availed Leave</h6>
               <h4>4</h4>
             </div>
           </div>
@@ -172,76 +235,21 @@ export default class MyLeaves extends React.Component {
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
-              <table className="table table-striped custom-table mb-0 datatable">
+              <table
+                className="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                id="DataTables_Table_0"
+                role="grid"
+                aria-describedby="DataTables_Table_0_info"
+              >
                 <thead>
-                  <tr>
-                    <th>Leave Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>No of Days</th>
+                  <tr role="row">
+                    <th>Start Date</th>
+                    <th>Work Hours</th>
                     <th>Reason</th>
-                    <th className="text-center">Status</th>
-                    <th>Approved by</th>
                     <th className="text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>Casual Leave</td>
-                    <td>8 Mar 2019</td>
-                    <td>9 Mar 2019</td>
-                    <td>2 days</td>
-                    <td>Going to Hospital</td>
-                    <td className="text-center">
-                      <div className="action-label">
-                        <a
-                          className="btn btn-white btn-sm btn-rounded"
-                          href="#"
-                        >
-                          <i className="fa fa-dot-circle-o text-purple"></i> New
-                        </a>
-                      </div>
-                    </td>
-                    <td>
-                      <h2 className="table-avatar">
-                        <a href="profile.html" className="avatar avatar-xs">
-                          <img src="assets/img/profiles/avatar-09.jpg" alt="" />
-                        </a>
-                        <a href="#">Richard Miles</a>
-                      </h2>
-                    </td>
-                    <td className="text-right">
-                      <div className="dropdown dropdown-action">
-                        <a
-                          href="#"
-                          className="action-icon dropdown-toggle"
-                          data-toggle="dropdown"
-                          aria-expanded="false"
-                        >
-                          <i className="material-icons">more_vert</i>
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-right">
-                          <a
-                            className="dropdown-item"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#edit_leave"
-                          >
-                            <i className="fa fa-pencil m-r-5"></i> Edit
-                          </a>
-                          <a
-                            className="dropdown-item"
-                            href="#"
-                            data-toggle="modal"
-                            data-target="#delete_approve"
-                          >
-                            <i className="fa fa-trash-o m-r-5"></i> Delete
-                          </a>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
+                <tbody>{this.renderAppliedLeaves()}</tbody>
               </table>
             </div>
           </div>
@@ -281,8 +289,8 @@ export default class MyLeaves extends React.Component {
                   </label>
                   <select
                     className="form-control"
-                    value={Duration}
-                    name="Duration"
+                    value={WorkHours}
+                    name="WorkHours"
                     onChange={this.handleChange}
                   >
                     <option value="8"> Full Day</option>
@@ -308,9 +316,9 @@ export default class MyLeaves extends React.Component {
                   </label>
                   <textarea
                     rows="4"
-                    name="ClientDescription"
+                    name="Description"
                     className="form-control"
-                    value={ClientDescription}
+                    value={Description}
                     onChange={this.handleChange}
                   ></textarea>
                 </div>
@@ -321,6 +329,124 @@ export default class MyLeaves extends React.Component {
                   >
                     Submit
                   </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="edit_leave" className="modal custom-modal fade" role="dialog">
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Leave</h5>
+                <button
+                  type="button"
+                  className="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="form-group">
+                  <label>
+                    Leave Type <span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-control"
+                    value={ProjectID}
+                    name="ProjectID"
+                    onChange={this.handleChange}
+                  >
+                    <option value="1118"> PTO</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Duration<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className="form-control"
+                    value={WorkHours}
+                    name="WorkHours"
+                    onChange={this.handleChange}
+                  >
+                    <option value="8"> Full Day</option>
+                    <option value="4"> Half Day</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>
+                    Date <span className="text-danger">*</span>
+                  </label>
+                  <div>
+                    <DatePicker
+                      className="form-control"
+                      selected={StartDate}
+                      onChange={this.handleDateChange}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>
+                    Leave Reason <span className="text-danger">*</span>
+                  </label>
+                  <textarea
+                    rows="4"
+                    name="Description"
+                    className="form-control"
+                    value={Description}
+                    onChange={this.handleChange}
+                  ></textarea>
+                </div>
+                <div className="submit-section">
+                  <button
+                    className="btn btn-primary submit-btn"
+                    onClick={() => this.leaveRequest()}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="modal custom-modal fade"
+          id="delete_approve"
+          role="dialog"
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div className="form-header">
+                  <h3>Delete Leave</h3>
+                  <p>Are you sure want to Cancel this leave?</p>
+                </div>
+                <div className="modal-btn delete-action">
+                  <div className="row">
+                    <div className="col-6">
+                      <a
+                        href="javascript:void(0);"
+                        className="btn btn-primary continue-btn"
+                      >
+                        Delete
+                      </a>
+                    </div>
+                    <div class="col-6">
+                      <a
+                        className="javascript:void(0);"
+                        data-dismiss="modal"
+                        class="btn btn-primary cancel-btn"
+                      >
+                        Cancel
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -15,6 +15,7 @@ export default class Layout extends React.Component {
         <Sidebar />
         <div className="page-wrapper">
           <Route path="/myleaves" component={MyLeaves} />
+          <Route path="/" exact component={MyLeaves} />
           <Route path="/profile" component={Profile} />
           <Route path="/logout" component={Login} />
         </div>

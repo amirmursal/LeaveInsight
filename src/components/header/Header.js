@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Avatar from "../../assests/images/avatar.png";
-import HeaderLogo from "../../assests/images/header-logo.png";
+import HeaderLogo from "../../assests/images/logo_white.png";
 export default class Header extends React.Component {
   logout = () => {
     localStorage.removeItem("TokenId");

@@ -43,6 +43,7 @@ export default class Sidebar extends React.Component {
 
   componentDidMount() {
     this.getProfileInfo();
+    window.sidenavinit();
   }
 
   render() {

@@ -17,7 +17,7 @@ $(document).ready(function() {
     this.$menuItem = $("#sidebar-menu a");
   };
 
-  function init() {
+  /* function init() {
     var $this = Sidemenu;
     $("#sidebar-menu a").on("click", function(e) {
       if (
@@ -46,10 +46,10 @@ $(document).ready(function() {
       .children("a:first")
       .addClass("active")
       .trigger("click");
-  }
+  } */
 
   // Sidebar Initiate
-  init();
+  //init();
 
   // Mobile menu sidebar overlay
 

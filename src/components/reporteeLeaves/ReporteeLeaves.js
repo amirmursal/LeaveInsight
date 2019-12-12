@@ -44,6 +44,7 @@ export default class ReporteeLeaves extends React.Component {
         console.log(error);
       });
   };
+
   cancellLeaveRequest = leave => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
@@ -75,6 +76,7 @@ export default class ReporteeLeaves extends React.Component {
         console.log(error);
       });
   };
+
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
@@ -124,7 +126,7 @@ export default class ReporteeLeaves extends React.Component {
             </h2>
           </td>
           <td>Planned PTO</td>
-          <td>{moment(element.StartDate).format("DD/MM/YYYY")}</td>
+          <td>{moment(element.StartDate).format("MM/DD/YYYY")}</td>
           <td>{element.ClientDescription}</td>
           <td>{element.Status}</td>
           <td className="text-right">
@@ -146,7 +148,7 @@ export default class ReporteeLeaves extends React.Component {
                 </button>
                 <button
                   className="dropdown-item"
-                  onClick={element => this.cancellLeaveRequest(element)}
+                  onClick={() => this.cancellLeaveRequest(element.ID)}
                 >
                   <i className="fa fa-ban m-r-5"></i> Rejected
                 </button>

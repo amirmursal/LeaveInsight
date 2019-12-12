@@ -47,8 +47,8 @@ export default class MyLeaves extends React.Component {
       ProjectID: this.state.ProjectID,
       Description: this.state.Description,
       WorkHours: this.state.WorkHours,
-      StartDate: moment(this.state.StartDate).format("DD/MM/YYYY"),
-      EndDate: moment(this.state.StartDate).format("DD/MM/YYYY")
+      StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
+      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY")
     };
     axios
       .post(
@@ -103,6 +103,68 @@ export default class MyLeaves extends React.Component {
     });
   };
 
+  cancelLeave = leave => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    let data = {
+      ID: parseInt(leave),
+      EntityName: "Employee Work Schedules",
+      Status: "Cancelled"
+    };
+    axios
+      .post(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+        data,
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+            "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        if (response.data !== null) {
+          this.getProfileInfo();
+        } else {
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  availLeave = leave => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    let data = {
+      ID: parseInt(leave),
+      EntityName: "Employee Work Schedules",
+      Status: "Availed"
+    };
+    axios
+      .post(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+        data,
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+            "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        if (response.data !== null) {
+          this.getProfileInfo();
+        } else {
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   getProfileInfo = () => {
     const userId = JSON.parse(localStorage.getItem("UserId"));
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
@@ -148,7 +210,7 @@ export default class MyLeaves extends React.Component {
     return this.state.AppliedLeaves.map((element, i) => {
       return (
         <tr key={i}>
-          <td>{moment(element.StartDAt).format("DD/MM/YYYY")}</td>
+          <td>{moment(element.StartDAt).format("MM/DD/YYYY")}</td>
           <td>{element.Duration}</td>
           <td>{element.ClientDescription}</td>
           <td>{element.Status}</td>
@@ -162,24 +224,42 @@ export default class MyLeaves extends React.Component {
               >
                 <i className="material-icons">more_vert</i>
               </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <a
-                  className="dropdown-item"
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#edit_leave"
-                >
-                  <i className="fa fa-pencil m-r-5"></i> Edit
-                </a>
-                <a
-                  className="dropdown-item"
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#delete_approve"
-                >
-                  <i className="fa fa-trash-o m-r-5"></i> Delete
-                </a>
-              </div>
+              {element.Status === "Cancelled" ||
+              element.Status === "Applied" ? (
+                <div className="dropdown-menu dropdown-menu-right">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#edit_leave"
+                  >
+                    <i className="fa fa-pencil m-r-5"></i> Edit
+                  </a>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    data-toggle="modal"
+                    data-target="#delete_approve"
+                  >
+                    <i className="fa fa-trash-o m-r-5"></i> Delete
+                  </a>
+                </div>
+              ) : (
+                <div className="dropdown-menu dropdown-menu-right">
+                  <button
+                    className="dropdown-item"
+                    onClick={() => this.availLeave(element.ID)}
+                  >
+                    <i className="fa fa-check m-r-5"></i> Avail
+                  </button>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => this.cancelLeave(element.ID)}
+                  >
+                    <i className="fa fa-trash-o m-r-5"></i> Cancel
+                  </button>
+                </div>
+              )}
             </div>
           </td>
         </tr>
@@ -224,25 +304,19 @@ export default class MyLeaves extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="stats-info">
               <h6>Annual Leave</h6>
               <h4>12</h4>
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="stats-info">
               <h6>Applied Leave</h6>
               <h4>3</h4>
             </div>
           </div>
-          <div className="col-md-3">
-            <div className="stats-info">
-              <h6>Availed Leave</h6>
-              <h4>4</h4>
-            </div>
-          </div>
-          <div className="col-md-3">
+          <div className="col-md-4">
             <div className="stats-info">
               <h6>Leave Balance</h6>
               <h4>5</h4>
@@ -345,6 +419,7 @@ export default class MyLeaves extends React.Component {
 
                 <div className="submit-section">
                   <button
+                    disabled={!Description}
                     className="btn btn-primary submit-btn"
                     onClick={() => this.leaveRequest()}
                   >

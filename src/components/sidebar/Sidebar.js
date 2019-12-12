@@ -1,9 +1,53 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../../config";
 
 export default class Sidebar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      IsSupervisor: null
+    };
+  }
+
+  getProfileInfo = () => {
+    const userId = JSON.parse(localStorage.getItem("UserId"));
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    axios
+      .get(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/GetEmployeeInformation/" +
+          userId,
+        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
+      )
+      .then(response => {
+        if (response.data !== null) {
+          this.setState({
+            IsSupervisor: parseInt(response.data.Employee[0].IsSupervisor)
+          });
+        } else {
+          this.setState({
+            error: true
+          });
+        }
+      })
+      .catch(error => {
+        this.setState({
+          error: true
+        });
+        console.log(error);
+      });
+  };
+
+  componentDidMount() {
+    this.getProfileInfo();
+  }
+
   render() {
-    //const isMenuActive = ?"active": "";
+    const { IsSupervisor } = this.state;
+    const showSupervisorMenu = IsSupervisor ? true : false;
     return (
       <div className="sidebar" id="sidebar">
         <div className="sidebar-inner slimscroll">
@@ -85,14 +129,16 @@ export default class Sidebar extends React.Component {
                   <li>
                     <a href="holidays.html">Holidays</a>
                   </li>*/}
-                  <li>
-                    <Link to="/reporteeleaves">
-                      Leaves (Reportee ){" "}
-                      <span className="badge badge-pill bg-primary float-right">
-                        1
-                      </span>
-                    </Link>
-                  </li>
+                  {showSupervisorMenu && (
+                    <li>
+                      <Link to="/reporteeleaves">
+                        Leaves (Reportee ){" "}
+                        <span className="badge badge-pill bg-primary float-right">
+                          1
+                        </span>
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link to="/myleaves">My Leaves</Link>
                   </li>

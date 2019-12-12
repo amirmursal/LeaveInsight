@@ -11,11 +11,13 @@ export default class MyLeaves extends React.Component {
     this.state = {
       AppliedLeaves: [],
       EmpID: null,
+      EmployeeName: "",
       ProjectID: 1118,
       Description: "",
       WorkHours: 8,
       StartDate: new Date(),
-      error: false
+      error: false,
+      message: null
     };
   }
 
@@ -34,12 +36,14 @@ export default class MyLeaves extends React.Component {
 
   leaveRequest = () => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    const EmpID = JSON.parse(localStorage.getItem("EmpID"));
+
     let data = {
       ID: -1,
       EntityName: "Employee Work Schedules",
       Type: "Project",
       Status: "Applied",
-      EmployeeID: parseInt(this.state.EmpID),
+      EmployeeID: parseInt(EmpID),
       ProjectID: this.state.ProjectID,
       Description: this.state.Description,
       WorkHours: this.state.WorkHours,
@@ -67,8 +71,9 @@ export default class MyLeaves extends React.Component {
             Description: "",
             WorkHours: 8,
             StartDate: new Date(),
-            error: true
+            message: "Leave applied successfully"
           });
+          this.getProfileInfo();
         } else {
           this.setState({
             EmpID: null,
@@ -76,7 +81,8 @@ export default class MyLeaves extends React.Component {
             Description: "",
             WorkHours: 8,
             StartDate: new Date(),
-            error: true
+            error: true,
+            message: null
           });
         }
       })
@@ -87,10 +93,14 @@ export default class MyLeaves extends React.Component {
           Description: "",
           WorkHours: 8,
           StartDate: new Date(),
-          error: true
+          error: true,
+          message: null
         });
         console.log(error);
       });
+    this.setState({
+      message: null
+    });
   };
 
   getProfileInfo = () => {
@@ -106,14 +116,15 @@ export default class MyLeaves extends React.Component {
       )
       .then(response => {
         if (response.data !== null) {
-          /* localStorage.setItem(
+          localStorage.setItem(
             "EmpID",
             JSON.stringify(response.data.Employee[0].EmpID)
-          );*/
+          );
           console.log(response.data.Employee[0]);
           this.setState({
             AppliedLeaves: response.data.Employee[0].AppliedLeaves,
-            EmpID: response.data.Employee[0].EmpID
+            EmpID: response.data.Employee[0].EmpID,
+            EmployeeName: response.data.Employee[0].FirstName
           });
         } else {
           this.setState({
@@ -140,7 +151,7 @@ export default class MyLeaves extends React.Component {
           <td>{moment(element.StartDAt).format("DD/MM/YYYY")}</td>
           <td>{element.Duration}</td>
           <td>{element.ClientDescription}</td>
-
+          <td>{element.Status}</td>
           <td className="text-right">
             <div className="dropdown dropdown-action">
               <a
@@ -177,14 +188,21 @@ export default class MyLeaves extends React.Component {
   };
 
   render() {
-    const { StartDate, ProjectID, Description, WorkHours } = this.state;
+    const {
+      StartDate,
+      ProjectID,
+      Description,
+      WorkHours,
+      EmployeeName,
+      message
+    } = this.state;
 
     return (
       <div className="content container-fluid">
         <div className="page-header">
           <div className="row align-items-center">
             <div className="col">
-              <h3 className="page-title">Leaves</h3>
+              <h3 className="page-title">Welcome {EmployeeName}!</h3>
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
                   <a href="">Employee</a>
@@ -199,7 +217,7 @@ export default class MyLeaves extends React.Component {
                 data-toggle="modal"
                 data-target="#add_leave"
               >
-                <i className="fa fa-plus"></i> Add Leave
+                <i className="fa fa-plus"></i> Apply Leave
               </a>
             </div>
           </div>
@@ -226,7 +244,7 @@ export default class MyLeaves extends React.Component {
           </div>
           <div className="col-md-3">
             <div className="stats-info">
-              <h6>Remaining Leave</h6>
+              <h6>Leave Balance</h6>
               <h4>5</h4>
             </div>
           </div>
@@ -246,6 +264,7 @@ export default class MyLeaves extends React.Component {
                     <th>Start Date</th>
                     <th>Work Hours</th>
                     <th>Reason</th>
+                    <th>Status</th>
                     <th className="text-right">Actions</th>
                   </tr>
                 </thead>
@@ -259,7 +278,7 @@ export default class MyLeaves extends React.Component {
           <div className="modal-dialog modal-dialog-centered" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Add Leave</h5>
+                <h5 className="modal-title">Apply Leave</h5>
                 <button
                   type="button"
                   className="close"
@@ -322,6 +341,8 @@ export default class MyLeaves extends React.Component {
                     onChange={this.handleChange}
                   ></textarea>
                 </div>
+                {message && <span>{message}</span>}
+
                 <div className="submit-section">
                   <button
                     className="btn btn-primary submit-btn"

@@ -105,7 +105,7 @@ export default class Profile extends React.Component {
                           <li>
                             <div className="title">Email:</div>
                             <div className="text">
-                              <span>amir.mursal@communitybrands.com</span>
+                              <span>{employee.Email1}</span>
                             </div>
                           </li>
                           <li>
@@ -123,7 +123,7 @@ export default class Profile extends React.Component {
                                   <img src={Avatar} alt="" />
                                 </div>
                               </div>
-                              <span>Madhu Menon</span>
+                              <span>{employee.Supervisor}</span>
                             </div>
                           </li>
                         </ul>

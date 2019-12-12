@@ -6,6 +6,7 @@ export default class Header extends React.Component {
   logout = () => {
     localStorage.removeItem("TokenId");
     localStorage.removeItem("UserId");
+    localStorage.removeItem("EmpID");
     this.props.history.push("/login");
   };
   render() {
@@ -26,7 +27,7 @@ export default class Header extends React.Component {
         </a>
 
         <div className="page-title-box">
-          <h3>Community Brands</h3>
+          <h3>Leave Insight Community Brands</h3>
         </div>
 
         <a id="mobile_btn" className="mobile_btn" href="#sidebar">

@@ -76,11 +76,10 @@ export default class Login extends React.Component {
 
             <div className="account-box">
               <div className="account-wrapper">
-                <h3 className="account-title">Login</h3>
-                <p className="account-subtitle">Access to Leave Insight</p>
+                <p className="account-subtitle">Login to Leave Insight</p>
 
                 <div className="form-group">
-                  <label>Email Address</label>
+                  <label>Username</label>
                   <input
                     name="username"
                     className="form-control"
@@ -94,11 +93,6 @@ export default class Login extends React.Component {
                   <div className="row">
                     <div className="col">
                       <label>Password</label>
-                    </div>
-                    <div className="col-auto">
-                      <a className="text-muted" href="#">
-                        Forgot password?
-                      </a>
                     </div>
                   </div>
                   <input
@@ -125,7 +119,7 @@ export default class Login extends React.Component {
                     className="card-footer-item"
                     style={{ color: "#dc3545" }}
                   >
-                    username or password incorrect
+                    Username or Password incorrect
                   </label>
                 )}
               </div>

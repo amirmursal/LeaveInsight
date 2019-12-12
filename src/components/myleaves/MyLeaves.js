@@ -186,7 +186,8 @@ export default class MyLeaves extends React.Component {
           this.setState({
             AppliedLeaves: response.data.Employee[0].AppliedLeaves,
             EmpID: response.data.Employee[0].EmpID,
-            EmployeeName: response.data.Employee[0].FirstName
+            EmployeeName: response.data.Employee[0].FirstName,
+            AppliedLeaveCount: response.data.Employee[0].AppliedLeaveCount
           });
         } else {
           this.setState({
@@ -274,7 +275,8 @@ export default class MyLeaves extends React.Component {
       Description,
       WorkHours,
       EmployeeName,
-      message
+      message,
+      AppliedLeaveCount
     } = this.state;
 
     return (
@@ -313,7 +315,7 @@ export default class MyLeaves extends React.Component {
           <div className="col-md-4">
             <div className="stats-info">
               <h6>Applied Leave</h6>
-              <h4>3</h4>
+              <h4>{AppliedLeaveCount}</h4>
             </div>
           </div>
           <div className="col-md-4">

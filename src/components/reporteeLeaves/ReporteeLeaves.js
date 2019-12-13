@@ -9,6 +9,8 @@ export default class ReporteeLeaves extends React.Component {
     super(props);
     this.state = {
       ReporteeAppliedLeaves: [],
+      ReporteeLeaves: [],
+      TodaysLeaves: [],
       error: false
     };
   }
@@ -93,7 +95,9 @@ export default class ReporteeLeaves extends React.Component {
           console.log(response.data.Employee[0]);
           this.setState({
             ReporteeAppliedLeaves:
-              response.data.Employee[0].ReporteeAppliedLeaves
+              response.data.Employee[0].ReporteeAppliedLeaves,
+            ReporteeLeaves: response.data.Employee[0].ReporteeLeaves,
+            TodaysLeaves: response.data.Employee[0].TodaysLeaves
           });
         } else {
           this.setState({
@@ -161,7 +165,7 @@ export default class ReporteeLeaves extends React.Component {
   };
 
   render() {
-    const { ReporteeAppliedLeaves } = this.state;
+    const { ReporteeAppliedLeaves, ReporteeLeaves, TodaysLeaves } = this.state;
     return (
       <div className="content container-fluid">
         <div className="page-header">
@@ -182,19 +186,17 @@ export default class ReporteeLeaves extends React.Component {
           <div className="col-md-4">
             <div className="stats-info">
               <h6>Planned Leaves</h6>
-              <h4>
-                8 <span>Today</span>
-              </h4>
+              <h4>{ReporteeLeaves.length}</h4>
             </div>
           </div>
+
           <div className="col-md-4">
             <div className="stats-info">
-              <h6>Unplanned Leaves</h6>
-              <h4>
-                0 <span>Today</span>
-              </h4>
+              <h6>Todays Absents</h6>
+              <h4>{TodaysLeaves.length}</h4>
             </div>
           </div>
+
           <div className="col-md-4">
             <div className="stats-info">
               <h6>Pending Requests</h6>

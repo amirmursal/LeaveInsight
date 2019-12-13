@@ -533,16 +533,16 @@ export default class MyLeaves extends React.Component {
             <div className="modal-content">
               <div className="modal-body">
                 <div className="form-header">
-                  <h3>Delete Leave</h3>
-                  <p>Are you sure want to Cancel this leave?</p>
+                  <h3>This feature will be added in next version</h3>
+                  {/*<p>This feature will be added in next version</p>*/}
                 </div>
                 <div className="modal-btn delete-action">
                   <div className="row">
-                    <div className="col-6">
+                    {/* <div className="col-6">
                       <a href="" className="btn btn-primary continue-btn">
                         Delete
                       </a>
-                    </div>
+            </div>*/}
                     <div className="col-6">
                       <a
                         href=""

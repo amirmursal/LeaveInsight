@@ -144,13 +144,13 @@ export default class ReporteeLeaves extends React.Component {
                   className="dropdown-item"
                   onClick={() => this.approveLeaveRequest(element.ID)}
                 >
-                  <i className="fa fa-check m-r-5"></i> Approved
+                  <i className="fa fa-check m-r-5"></i> Approve
                 </button>
                 <button
                   className="dropdown-item"
                   onClick={() => this.cancellLeaveRequest(element.ID)}
                 >
-                  <i className="fa fa-ban m-r-5"></i> Rejected
+                  <i className="fa fa-ban m-r-5"></i> Reject
                 </button>
               </div>
             </div>

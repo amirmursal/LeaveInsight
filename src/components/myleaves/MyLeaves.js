@@ -17,7 +17,9 @@ export default class MyLeaves extends React.Component {
       WorkHours: 8,
       StartDate: new Date(),
       error: false,
-      message: null
+      message: null,
+      CurrentBalance: 0,
+      LeaveTaken: 0
     };
   }
 
@@ -187,7 +189,9 @@ export default class MyLeaves extends React.Component {
             AppliedLeaves: response.data.Employee[0].AppliedLeaves,
             EmpID: response.data.Employee[0].EmpID,
             EmployeeName: response.data.Employee[0].FirstName,
-            AppliedLeaveCount: response.data.Employee[0].AppliedLeaveCount
+            AppliedLeaveCount: response.data.Employee[0].AppliedLeaveCount,
+            CurrentBalance: response.data.Employee[0].CurrentBalance,
+            LeaveTaken: response.data.Employee[0].LeaveTaken
           });
         } else {
           this.setState({
@@ -276,7 +280,10 @@ export default class MyLeaves extends React.Component {
       WorkHours,
       EmployeeName,
       message,
-      AppliedLeaveCount
+      AppliedLeaveCount,
+      AppliedLeaves,
+      CurrentBalance,
+      LeaveTaken
     } = this.state;
 
     return (
@@ -308,8 +315,8 @@ export default class MyLeaves extends React.Component {
         <div className="row">
           <div className="col-md-4">
             <div className="stats-info">
-              <h6>Annual Leave</h6>
-              <h4>12</h4>
+              <h6>Leaves Taken</h6>
+              <h4>{parseFloat(LeaveTaken).toPrecision(2)}</h4>
             </div>
           </div>
           <div className="col-md-4">
@@ -321,32 +328,36 @@ export default class MyLeaves extends React.Component {
           <div className="col-md-4">
             <div className="stats-info">
               <h6>Leave Balance</h6>
-              <h4>5</h4>
+              <h4>{parseFloat(CurrentBalance).toPrecision(2)}</h4>
             </div>
           </div>
         </div>
 
         <div className="row">
           <div className="col-md-12">
-            <div className="table-responsive">
-              <table
-                className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                id="DataTables_Table_0"
-                role="grid"
-                aria-describedby="DataTables_Table_0_info"
-              >
-                <thead>
-                  <tr role="row">
-                    <th>Start Date</th>
-                    <th>Work Hours</th>
-                    <th>Reason</th>
-                    <th>Status</th>
-                    <th className="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>{this.renderAppliedLeaves()}</tbody>
-              </table>
-            </div>
+            {AppliedLeaves.length > 0 ? (
+              <div className="table-responsive">
+                <table
+                  className="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                  id="DataTables_Table_0"
+                  role="grid"
+                  aria-describedby="DataTables_Table_0_info"
+                >
+                  <thead>
+                    <tr role="row">
+                      <th>Start Date</th>
+                      <th>Work Hours</th>
+                      <th>Reason</th>
+                      <th>Status</th>
+                      <th className="text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>{this.renderAppliedLeaves()}</tbody>
+                </table>
+              </div>
+            ) : (
+              <span>No leaves applied yet</span>
+            )}
           </div>
         </div>
 

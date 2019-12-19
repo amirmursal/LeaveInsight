@@ -3,19 +3,15 @@ import axios from "axios";
 import moment from "moment";
 import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
+import { UserConsumer } from "../provider/UserProvider";
 
 export default class ReporteeLeaves extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ReporteeAppliedLeaves: [],
-      ReporteeLeaves: [],
-      TodaysLeaves: [],
-      error: false
-    };
-  }
-
-  approveLeaveRequest = leave => {
+  /**
+   * function takes care for approve leave request
+   * @param user
+   * @param getUser
+   */
+  approveLeaveRequest = (leave, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(leave),
@@ -36,18 +32,19 @@ export default class ReporteeLeaves extends React.Component {
         }
       )
       .then(response => {
-        if (response.data !== null) {
-          this.getProfileInfo();
-          console.log(response.data);
-        } else {
-        }
+        getUser();
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  cancellLeaveRequest = leave => {
+  /**
+   * function takes care for cancel leave request
+   * @param user
+   * @param getUser
+   */
+  cancellLeaveRequest = (leave, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(leave),
@@ -68,57 +65,20 @@ export default class ReporteeLeaves extends React.Component {
         }
       )
       .then(response => {
-        if (response.data !== null) {
-          this.getProfileInfo();
-          console.log(response.data);
-        } else {
-        }
+        getUser();
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  getProfileInfo = () => {
-    const userId = JSON.parse(localStorage.getItem("UserId"));
-    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    axios
-      .get(
-        " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/GetEmployeeInformation/" +
-          userId,
-        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
-      )
-      .then(response => {
-        if (response.data !== null) {
-          console.log(response.data.Employee[0]);
-          this.setState({
-            ReporteeAppliedLeaves:
-              response.data.Employee[0].ReporteeAppliedLeaves,
-            ReporteeLeaves: response.data.Employee[0].ReporteeLeaves,
-            TodaysLeaves: response.data.Employee[0].TodaysLeaves
-          });
-        } else {
-          this.setState({
-            error: true
-          });
-        }
-      })
-      .catch(error => {
-        this.setState({
-          error: true
-        });
-        console.log(error);
-      });
-  };
-
-  componentDidMount() {
-    this.getProfileInfo();
-  }
-
-  reporteeAppliedLeaves = () => {
-    return this.state.ReporteeAppliedLeaves.map((element, i) => {
+  /**
+   * function takes care for rendering reportee applied leaves data
+   * @param ReporteeAppliedLeaves array
+   * @param getUser
+   */
+  reporteeAppliedLeaves = (ReporteeAppliedLeaves, getUser) => {
+    return ReporteeAppliedLeaves.map((element, i) => {
       return (
         <tr key={i}>
           <td>
@@ -146,13 +106,13 @@ export default class ReporteeLeaves extends React.Component {
               <div className="dropdown-menu dropdown-menu-right">
                 <button
                   className="dropdown-item"
-                  onClick={() => this.approveLeaveRequest(element.ID)}
+                  onClick={() => this.approveLeaveRequest(element.ID, getUser)}
                 >
                   <i className="fa fa-check m-r-5"></i> Approve
                 </button>
                 <button
                   className="dropdown-item"
-                  onClick={() => this.cancellLeaveRequest(element.ID)}
+                  onClick={() => this.cancellLeaveRequest(element.ID, getUser)}
                 >
                   <i className="fa fa-ban m-r-5"></i> Reject
                 </button>
@@ -165,70 +125,90 @@ export default class ReporteeLeaves extends React.Component {
   };
 
   render() {
-    const { ReporteeAppliedLeaves, ReporteeLeaves, TodaysLeaves } = this.state;
     return (
-      <div className="content container-fluid">
-        <div className="page-header">
-          <div className="row align-items-center">
-            <div className="col">
-              <h3 className="page-title">Leaves</h3>
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="">Employee</a>
-                </li>
-                <li className="breadcrumb-item active">Reportee Leaves</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Planned Leaves</h6>
-              <h4>{ReporteeLeaves.length}</h4>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Todays Absents</h6>
-              <h4>{TodaysLeaves.length}</h4>
-            </div>
-          </div>
-
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Pending Requests</h6>
-              <h4>{ReporteeAppliedLeaves.length}</h4>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-md-12">
-            {ReporteeAppliedLeaves.length > 0 ? (
-              <div className="table-responsive">
-                <table className="table table-striped custom-table mb-0 datatable">
-                  <thead>
-                    <tr>
-                      <th>Employee</th>
-                      <th>Leave Type</th>
-                      <th>Start Date</th>
-                      <th>Reason</th>
-                      <th>Status</th>
-                      <th className="text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>{this.reporteeAppliedLeaves()}</tbody>
-                </table>
+      <UserConsumer>
+        {({ user, getUser }) => (
+          <div className="content container-fluid">
+            <div className="page-header">
+              <div className="row align-items-center">
+                <div className="col">
+                  <h3 className="page-title">Leaves</h3>
+                  <ul className="breadcrumb">
+                    <li className="breadcrumb-item">
+                      <a href="">Employee</a>
+                    </li>
+                    <li className="breadcrumb-item active">Reportee Leaves</li>
+                  </ul>
+                </div>
               </div>
-            ) : (
-              "No Pending leave request"
-            )}
+            </div>
+
+            <div className="row">
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Planned Leaves</h6>
+                  <h4>
+                    {user.ReporteeLeaves !== undefined
+                      ? user.ReporteeLeaves.length
+                      : 0}
+                  </h4>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Todays Absents</h6>
+                  <h4>
+                    {user.TodaysLeaves !== undefined
+                      ? user.TodaysLeaves.length
+                      : 0}
+                  </h4>
+                </div>
+              </div>
+
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Pending Requests</h6>
+                  <h4>
+                    {user.ReporteeAppliedLeaves !== undefined
+                      ? user.ReporteeAppliedLeaves.length
+                      : 0}
+                  </h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12">
+                {user.ReporteeAppliedLeaves ? (
+                  <div className="table-responsive">
+                    <table className="table table-striped custom-table mb-0 datatable">
+                      <thead>
+                        <tr>
+                          <th>Employee</th>
+                          <th>Leave Type</th>
+                          <th>Start Date</th>
+                          <th>Reason</th>
+                          <th>Status</th>
+                          <th className="text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.reporteeAppliedLeaves(
+                          user.ReporteeAppliedLeaves,
+                          getUser
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <span>No Pending leave request</span>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </UserConsumer>
     );
   }
 }

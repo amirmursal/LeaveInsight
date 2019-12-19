@@ -1,60 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { serverUrl } from "../../config";
+import { UserConsumer } from "../provider/UserProvider";
 
 export default class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      IsSupervisor: null
-    };
-  }
-
-  getProfileInfo = () => {
-    const userId = JSON.parse(localStorage.getItem("UserId"));
-    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    axios
-      .get(
-        " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/GetEmployeeInformation/" +
-          userId,
-        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
-      )
-      .then(response => {
-        if (response.data !== null) {
-          this.setState({
-            IsSupervisor: parseInt(response.data.Employee[0].IsSupervisor)
-          });
-        } else {
-          this.setState({
-            error: true
-          });
-        }
-      })
-      .catch(error => {
-        this.setState({
-          error: true
-        });
-        console.log(error);
-      });
-  };
-
   componentDidMount() {
-    this.getProfileInfo();
+    /**
+     * Init function for side bar to prevent double click issue
+     * of main menu to display submenus
+     */
     window.sidenavinit();
   }
 
   render() {
-    const { IsSupervisor } = this.state;
-    const showSupervisorMenu = IsSupervisor ? true : false;
     return (
-      <div className="sidebar" id="sidebar">
-        <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu">
-            <ul>
-              {/*<li className="menu-title">
+      <UserConsumer>
+        {({ user }) => (
+          <div className="sidebar" id="sidebar">
+            <div className="sidebar-inner slimscroll">
+              <div id="sidebar-menu" className="sidebar-menu">
+                <ul>
+                  {/*<li className="menu-title">
                 <span>Main</span>
               </li>
               <li className="submenu">
@@ -118,32 +83,34 @@ export default class Sidebar extends React.Component {
               <li className="menu-title">
                 <span>Employee</span>
               </li>*/}
-              <li className="submenu">
-                <a href="" className="noti-dot">
-                  <i className="la la-user"></i> <span> Employee</span>{" "}
-                  <span className="menu-arrow"></span>
-                </a>
-                <ul style={{ display: "none" }}>
-                  {/*<li>
+                  <li className="submenu">
+                    <a href="" className="noti-dot">
+                      <i className="la la-user"></i> <span> Employee</span>{" "}
+                      <span className="menu-arrow"></span>
+                    </a>
+                    <ul style={{ display: "none" }}>
+                      {/*<li>
                     <a href="employees.html">All Employees</a>
                   </li>
                   <li>
                     <a href="holidays.html">Holidays</a>
                   </li>*/}
-                  {showSupervisorMenu && (
-                    <li>
-                      <Link to="/reporteeleaves">
-                        Leaves (Reportee ){" "}
-                        <span className="badge badge-pill bg-primary float-right">
-                          1
-                        </span>
-                      </Link>
-                    </li>
-                  )}
-                  <li>
-                    <Link to="/myleaves">My Leaves</Link>
-                  </li>
-                  {/*<li>
+                      {user.IsSupervisor === "1" && (
+                        <li>
+                          <Link to="/reporteeleaves">
+                            Leaves (Reportee ){" "}
+                            <span className="badge badge-pill bg-primary float-right">
+                              {user.ReporteeAppliedLeaves !== undefined
+                                ? user.ReporteeAppliedLeaves.length
+                                : 0}
+                            </span>
+                          </Link>
+                        </li>
+                      )}
+                      <li>
+                        <Link to="/myleaves">My Leaves</Link>
+                      </li>
+                      {/*<li>
                     <a href="leave-settings.html">Leave Settings</a>
                   </li>
                   <li>
@@ -164,9 +131,9 @@ export default class Sidebar extends React.Component {
                   <li>
                     <a href="overtime.html">Overtime</a>
                   </li>*/}
-                </ul>
-              </li>
-              {/*  <li>
+                    </ul>
+                  </li>
+                  {/*  <li>
                 <a href="clients.html">
                   <i className="la la-users"></i> <span>Clients</span>
                 </a>
@@ -568,10 +535,12 @@ export default class Sidebar extends React.Component {
                   </li>
                 </ul>
               </li>*/}
-            </ul>
+                </ul>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </UserConsumer>
     );
   }
 }

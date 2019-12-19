@@ -4,48 +4,55 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { serverUrl } from "../../config";
+import { UserConsumer } from "../provider/UserProvider";
 
 export default class MyLeaves extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      AppliedLeaves: [],
       EmpID: null,
-      EmployeeName: "",
       ProjectID: 1118,
       Description: "",
       WorkHours: 8,
       StartDate: new Date(),
       error: false,
-      message: null,
-      CurrentBalance: 0,
-      LeaveTaken: 0
+      message: null
     };
   }
 
+  /**
+   * Date change handler for react-datepicker
+   * @param date
+   */
   handleDateChange = date => {
     this.setState({
       StartDate: date
     });
   };
 
-  // common input change handler for input and select
+  /**
+   * common input change handler for input and select
+   * @param event
+   */
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
 
-  leaveRequest = () => {
+  /**
+   * function takes care for applying leave request
+   * @param user
+   * @param getUser
+   */
+  leaveRequest = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    const EmpID = JSON.parse(localStorage.getItem("EmpID"));
-
     let data = {
       ID: -1,
       EntityName: "Employee Work Schedules",
       Type: "Project",
       Status: "Applied",
-      EmployeeID: parseInt(EmpID),
+      EmployeeID: parseInt(user.EmpID),
       ProjectID: this.state.ProjectID,
       Description: this.state.Description,
       WorkHours: this.state.WorkHours,
@@ -66,38 +73,16 @@ export default class MyLeaves extends React.Component {
         }
       )
       .then(response => {
-        if (response.data !== null) {
-          this.setState({
-            EmpID: null,
-            ProjectID: 1118,
-            Description: "",
-            WorkHours: 8,
-            StartDate: new Date(),
-            message: "Leave applied successfully"
-          });
-          this.getProfileInfo();
-        } else {
-          this.setState({
-            EmpID: null,
-            ProjectID: 1118,
-            Description: "",
-            WorkHours: 8,
-            StartDate: new Date(),
-            error: true,
-            message: null
-          });
-        }
-      })
-      .catch(error => {
+        getUser();
         this.setState({
-          EmpID: null,
           ProjectID: 1118,
           Description: "",
           WorkHours: 8,
           StartDate: new Date(),
-          error: true,
-          message: null
+          message: "Leave applied successfully"
         });
+      })
+      .catch(error => {
         console.log(error);
       });
     this.setState({
@@ -105,7 +90,12 @@ export default class MyLeaves extends React.Component {
     });
   };
 
-  cancelLeave = leave => {
+  /**
+   * function takes care for cancell leave request
+   * @param user
+   * @param getUser
+   */
+  cancelLeave = (leave, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(leave),
@@ -126,17 +116,19 @@ export default class MyLeaves extends React.Component {
         }
       )
       .then(response => {
-        if (response.data !== null) {
-          this.getProfileInfo();
-        } else {
-        }
+        getUser();
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  availLeave = leave => {
+  /**
+   * function takes care for availing leave request
+   * @param user
+   * @param getUser
+   */
+  availLeave = (leave, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(leave),
@@ -157,62 +149,20 @@ export default class MyLeaves extends React.Component {
         }
       )
       .then(response => {
-        if (response.data !== null) {
-          this.getProfileInfo();
-        } else {
-        }
+        getUser();
       })
       .catch(error => {
         console.log(error);
       });
   };
 
-  getProfileInfo = () => {
-    const userId = JSON.parse(localStorage.getItem("UserId"));
-    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    axios
-      .get(
-        " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/GetEmployeeInformation/" +
-          userId,
-        { headers: { AptifyAuthorization: "DomainWithContainer " + TokenId } }
-      )
-      .then(response => {
-        if (response.data !== null) {
-          localStorage.setItem(
-            "EmpID",
-            JSON.stringify(response.data.Employee[0].EmpID)
-          );
-          console.log(response.data.Employee[0]);
-          this.setState({
-            AppliedLeaves: response.data.Employee[0].AppliedLeaves,
-            EmpID: response.data.Employee[0].EmpID,
-            EmployeeName: response.data.Employee[0].FirstName,
-            AppliedLeaveCount: response.data.Employee[0].AppliedLeaveCount,
-            CurrentBalance: response.data.Employee[0].CurrentBalance,
-            LeaveTaken: response.data.Employee[0].LeaveTaken
-          });
-        } else {
-          this.setState({
-            error: true
-          });
-        }
-      })
-      .catch(error => {
-        this.setState({
-          error: true
-        });
-        console.log(error);
-      });
-  };
-
-  componentDidMount() {
-    this.getProfileInfo();
-  }
-
-  renderAppliedLeaves = () => {
-    return this.state.AppliedLeaves.map((element, i) => {
+  /**
+   * function takes care for rendering applied leaves data
+   * @param AppliedLeaves array
+   * @param getUser
+   */
+  renderAppliedLeaves = (AppliedLeaves, getUser) => {
+    return AppliedLeaves.map((element, i) => {
       return (
         <tr key={i}>
           <td>{moment(element.StartDAt).format("MM/DD/YYYY")}</td>
@@ -253,13 +203,13 @@ export default class MyLeaves extends React.Component {
                 <div className="dropdown-menu dropdown-menu-right">
                   <button
                     className="dropdown-item"
-                    onClick={() => this.availLeave(element.ID)}
+                    onClick={() => this.availLeave(element.ID, getUser)}
                   >
                     <i className="fa fa-check m-r-5"></i> Avail
                   </button>
                   <button
                     className="dropdown-item"
-                    onClick={() => this.cancelLeave(element.ID)}
+                    onClick={() => this.cancelLeave(element.ID, getUser)}
                   >
                     <i className="fa fa-trash-o m-r-5"></i> Cancel
                   </button>
@@ -278,287 +228,302 @@ export default class MyLeaves extends React.Component {
       ProjectID,
       Description,
       WorkHours,
-      EmployeeName,
-      message,
-      AppliedLeaveCount,
-      AppliedLeaves,
-      CurrentBalance,
-      LeaveTaken
+      message
     } = this.state;
 
     return (
-      <div className="content container-fluid">
-        <div className="page-header">
-          <div className="row align-items-center">
-            <div className="col">
-              <h3 className="page-title">Welcome {EmployeeName}!</h3>
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <a href="">Employee</a>
-                </li>
-                <li className="breadcrumb-item active">My Leaves</li>
-              </ul>
+      <UserConsumer>
+        {({ user, getUser }) => (
+          <div className="content container-fluid">
+            <div className="page-header">
+              <div className="row align-items-center">
+                <div className="col">
+                  <h3 className="page-title">Welcome {user.FirstName}!</h3>
+                  <ul className="breadcrumb">
+                    <li className="breadcrumb-item">
+                      <a href="">Employee</a>
+                    </li>
+                    <li className="breadcrumb-item active">My Leaves</li>
+                  </ul>
+                </div>
+                <div className="col-auto float-right ml-auto">
+                  <a
+                    href="#C"
+                    className="btn add-btn"
+                    data-toggle="modal"
+                    data-target="#add_leave"
+                  >
+                    <i className="fa fa-plus"></i> Apply Leave
+                  </a>
+                </div>
+              </div>
             </div>
-            <div className="col-auto float-right ml-auto">
-              <a
-                href="#C"
-                className="btn add-btn"
-                data-toggle="modal"
-                data-target="#add_leave"
+
+            <div className="row">
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Leaves Taken</h6>
+                  <h4>{parseFloat(user.LeaveTaken).toPrecision(2)}</h4>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Applied Leave</h6>
+                  <h4>{user.AppliedLeaveCount}</h4>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="stats-info">
+                  <h6>Leave Balance</h6>
+                  <h4>{parseFloat(user.CurrentBalance).toPrecision(2)}</h4>
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12">
+                {user.AppliedLeaves ? (
+                  <div className="table-responsive">
+                    <table
+                      className="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                      id="DataTables_Table_0"
+                      role="grid"
+                      aria-describedby="DataTables_Table_0_info"
+                    >
+                      <thead>
+                        <tr role="row">
+                          <th>Start Date</th>
+                          <th>Work Hours</th>
+                          <th>Reason</th>
+                          <th>Status</th>
+                          <th className="text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.renderAppliedLeaves(user.AppliedLeaves, getUser)}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <span>No leaves applied yet</span>
+                )}
+              </div>
+            </div>
+
+            <div
+              id="add_leave"
+              className="modal custom-modal fade"
+              role="dialog"
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
               >
-                <i className="fa fa-plus"></i> Apply Leave
-              </a>
-            </div>
-          </div>
-        </div>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Apply Leave</h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label>
+                        Leave Type <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        value={ProjectID}
+                        name="ProjectID"
+                        onChange={this.handleChange}
+                      >
+                        <option value="1118">PTO</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>
+                        Duration<span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        value={WorkHours}
+                        name="WorkHours"
+                        onChange={this.handleChange}
+                      >
+                        <option value="8"> Full Day</option>
+                        <option value="4"> Half Day</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>
+                        Date <span className="text-danger">*</span>
+                      </label>
+                      <div>
+                        <DatePicker
+                          className="form-control"
+                          selected={StartDate}
+                          onChange={this.handleDateChange}
+                        />
+                      </div>
+                    </div>
 
-        <div className="row">
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Leaves Taken</h6>
-              <h4>{parseFloat(LeaveTaken).toPrecision(2)}</h4>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Applied Leave</h6>
-              <h4>{AppliedLeaveCount}</h4>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="stats-info">
-              <h6>Leave Balance</h6>
-              <h4>{parseFloat(CurrentBalance).toPrecision(2)}</h4>
-            </div>
-          </div>
-        </div>
+                    <div className="form-group">
+                      <label>
+                        Leave Reason <span className="text-danger">*</span>
+                      </label>
+                      <textarea
+                        rows="4"
+                        name="Description"
+                        className="form-control"
+                        value={Description}
+                        onChange={this.handleChange}
+                      ></textarea>
+                    </div>
+                    {message && <span>{message}</span>}
 
-        <div className="row">
-          <div className="col-md-12">
-            {AppliedLeaves.length > 0 ? (
-              <div className="table-responsive">
-                <table
-                  className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                  id="DataTables_Table_0"
-                  role="grid"
-                  aria-describedby="DataTables_Table_0_info"
-                >
-                  <thead>
-                    <tr role="row">
-                      <th>Start Date</th>
-                      <th>Work Hours</th>
-                      <th>Reason</th>
-                      <th>Status</th>
-                      <th className="text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>{this.renderAppliedLeaves()}</tbody>
-                </table>
-              </div>
-            ) : (
-              <span>No leaves applied yet</span>
-            )}
-          </div>
-        </div>
-
-        <div id="add_leave" className="modal custom-modal fade" role="dialog">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Apply Leave</h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>
-                    Leave Type <span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className="form-control"
-                    value={ProjectID}
-                    name="ProjectID"
-                    onChange={this.handleChange}
-                  >
-                    <option value="1118"> PTO</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>
-                    Duration<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className="form-control"
-                    value={WorkHours}
-                    name="WorkHours"
-                    onChange={this.handleChange}
-                  >
-                    <option value="8"> Full Day</option>
-                    <option value="4"> Half Day</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>
-                    Date <span className="text-danger">*</span>
-                  </label>
-                  <div>
-                    <DatePicker
-                      className="form-control"
-                      selected={StartDate}
-                      onChange={this.handleDateChange}
-                    />
+                    <div className="submit-section">
+                      <button
+                        disabled={!Description}
+                        className="btn btn-primary submit-btn"
+                        onClick={() => this.leaveRequest(user, getUser)}
+                      >
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="form-group">
-                  <label>
-                    Leave Reason <span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    rows="4"
-                    name="Description"
-                    className="form-control"
-                    value={Description}
-                    onChange={this.handleChange}
-                  ></textarea>
-                </div>
-                {message && <span>{message}</span>}
-
-                <div className="submit-section">
-                  <button
-                    disabled={!Description}
-                    className="btn btn-primary submit-btn"
-                    onClick={() => this.leaveRequest()}
-                  >
-                    Submit
-                  </button>
-                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div id="edit_leave" className="modal custom-modal fade" role="dialog">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Leave</h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label>
-                    Leave Type <span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className="form-control"
-                    value={ProjectID}
-                    name="ProjectID"
-                    onChange={this.handleChange}
-                  >
-                    <option value="1118"> PTO</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>
-                    Duration<span className="text-danger">*</span>
-                  </label>
-                  <select
-                    className="form-control"
-                    value={WorkHours}
-                    name="WorkHours"
-                    onChange={this.handleChange}
-                  >
-                    <option value="8"> Full Day</option>
-                    <option value="4"> Half Day</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>
-                    Date <span className="text-danger">*</span>
-                  </label>
-                  <div>
-                    <DatePicker
-                      className="form-control"
-                      selected={StartDate}
-                      onChange={this.handleDateChange}
-                    />
+            <div
+              id="edit_leave"
+              className="modal custom-modal fade"
+              role="dialog"
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
+              >
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Edit Leave</h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                    <div className="form-group">
+                      <label>
+                        Leave Type <span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        value={ProjectID}
+                        name="ProjectID"
+                        onChange={this.handleChange}
+                      >
+                        <option value="1118"> PTO</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>
+                        Duration<span className="text-danger">*</span>
+                      </label>
+                      <select
+                        className="form-control"
+                        value={WorkHours}
+                        name="WorkHours"
+                        onChange={this.handleChange}
+                      >
+                        <option value="8"> Full Day</option>
+                        <option value="4"> Half Day</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label>
+                        Date <span className="text-danger">*</span>
+                      </label>
+                      <div>
+                        <DatePicker
+                          className="form-control"
+                          selected={StartDate}
+                          onChange={this.handleDateChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>
+                        Leave Reason <span className="text-danger">*</span>
+                      </label>
+                      <textarea
+                        rows="4"
+                        name="Description"
+                        className="form-control"
+                        value={Description}
+                        onChange={this.handleChange}
+                      ></textarea>
+                    </div>
+                    <div className="submit-section">
+                      <button
+                        className="btn btn-primary submit-btn"
+                        onClick={() => this.updateLeaveRequest()}
+                      >
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </div>
-
-                <div className="form-group">
-                  <label>
-                    Leave Reason <span className="text-danger">*</span>
-                  </label>
-                  <textarea
-                    rows="4"
-                    name="Description"
-                    className="form-control"
-                    value={Description}
-                    onChange={this.handleChange}
-                  ></textarea>
-                </div>
-                <div className="submit-section">
-                  <button
-                    className="btn btn-primary submit-btn"
-                    onClick={() => this.leaveRequest()}
-                  >
-                    Submit
-                  </button>
-                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div
-          className="modal custom-modal fade"
-          id="delete_approve"
-          role="dialog"
-        >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content">
-              <div className="modal-body">
-                <div className="form-header">
-                  <h3>This feature will be added in next version</h3>
-                  {/*<p>This feature will be added in next version</p>*/}
-                </div>
-                <div className="modal-btn delete-action">
-                  <div className="row">
-                    {/* <div className="col-6">
+            <div
+              className="modal custom-modal fade"
+              id="delete_approve"
+              role="dialog"
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-body">
+                    <div className="form-header">
+                      <h3>This feature will be added in next version</h3>
+                      {/*<p>This feature will be added in next version</p>*/}
+                    </div>
+                    <div className="modal-btn delete-action">
+                      <div className="row">
+                        {/* <div className="col-6">
                       <a href="" className="btn btn-primary continue-btn">
                         Delete
                       </a>
             </div>*/}
-                    <div className="col-6">
-                      <a
-                        href=""
-                        data-dismiss="modal"
-                        className="btn btn-primary cancel-btn"
-                      >
-                        Cancel
-                      </a>
+                        <div className="col-6">
+                          <a
+                            href=""
+                            data-dismiss="modal"
+                            className="btn btn-primary cancel-btn"
+                          >
+                            Cancel
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </UserConsumer>
     );
   }
 }

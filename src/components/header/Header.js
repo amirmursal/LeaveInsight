@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import Avatar from "../../assests/images/avatar.png";
 import HeaderLogo from "../../assests/images/logo_white.png";
 export default class Header extends React.Component {
+  /**
+   *  function will clear the localstorage data (TokenId,UserId)
+   *  from the browser and redirect to login screen
+   */
   logout = () => {
     localStorage.removeItem("TokenId");
     localStorage.removeItem("UserId");
-    localStorage.removeItem("EmpID");
     this.props.history.push("/login");
   };
   render() {

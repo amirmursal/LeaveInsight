@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { serverUrl } from "../../config";
+import { UserConsumer } from "../provider/UserProvider";
 import logo from "../../assests/images/logo.png";
 
 export default class Login extends React.Component {
@@ -13,14 +14,21 @@ export default class Login extends React.Component {
     };
   }
 
-  // common input change handler for input and select
+  /**
+   * common input change handler for input and select
+   * @param event
+   */
   handleChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
 
-  login = () => {
+  /**
+   * function take care for login into system
+   * @param getUser
+   */
+  login = getUser => {
     const { username, password } = this.state;
     const { history } = this.props;
     axios
@@ -43,6 +51,7 @@ export default class Login extends React.Component {
             "TokenId",
             JSON.stringify(response.data.TokenId)
           );
+          getUser(response.data);
           history.push("/");
         } else {
           this.setState({
@@ -61,6 +70,7 @@ export default class Login extends React.Component {
         console.log(error);
       });
   };
+
   render() {
     const { username, password } = this.state;
     const isDisable = !username || !password;
@@ -105,14 +115,18 @@ export default class Login extends React.Component {
                   />
                 </div>
                 <div className="form-group text-center">
-                  <button
-                    disabled={isDisable}
-                    className="btn btn-primary account-btn"
-                    onClick={() => this.login()}
-                    tabIndex="3"
-                  >
-                    Login
-                  </button>
+                  <UserConsumer>
+                    {({ getUser }) => (
+                      <button
+                        disabled={isDisable}
+                        className="btn btn-primary account-btn"
+                        onClick={() => this.login(getUser)}
+                        tabIndex="3"
+                      >
+                        Login
+                      </button>
+                    )}
+                  </UserConsumer>
                 </div>
                 {this.state.error && (
                   <label

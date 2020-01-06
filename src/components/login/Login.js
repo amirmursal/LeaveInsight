@@ -3,6 +3,7 @@ import axios from "axios";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
 import logo from "../../assests/images/logo.png";
+import Loader from "../common/Loader";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -10,7 +11,8 @@ export default class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
-      error: false
+      error: false,
+      loading: false
     };
   }
 
@@ -31,6 +33,9 @@ export default class Login extends React.Component {
   login = getUser => {
     const { username, password } = this.state;
     const { history } = this.props;
+    this.setState({
+      loading: true
+    });
     axios
       .get(
         "https://" +
@@ -43,7 +48,8 @@ export default class Login extends React.Component {
       .then(response => {
         this.setState({
           username: "",
-          password: ""
+          password: "",
+          loading: false
         });
         if (response.data !== null) {
           localStorage.setItem("UserId", JSON.stringify(response.data.UserId));
@@ -57,7 +63,8 @@ export default class Login extends React.Component {
           this.setState({
             username: "",
             password: "",
-            error: true
+            error: true,
+            loading: false
           });
         }
       })
@@ -65,14 +72,15 @@ export default class Login extends React.Component {
         this.setState({
           username: "",
           password: "",
-          error: true
+          error: true,
+          loading: false
         });
         console.log(error);
       });
   };
 
   render() {
-    const { username, password } = this.state;
+    const { username, password, loading } = this.state;
     const isDisable = !username || !password;
     return (
       <div className="account-page">
@@ -123,7 +131,7 @@ export default class Login extends React.Component {
                         onClick={() => this.login(getUser)}
                         tabIndex="3"
                       >
-                        Login
+                        {loading && <Loader />} Login
                       </button>
                     )}
                   </UserConsumer>

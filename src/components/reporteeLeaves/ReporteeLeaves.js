@@ -180,11 +180,16 @@ export default class ReporteeLeaves extends React.Component {
 
             <div className="row">
               <div className="col-md-12">
-                {user.ReporteeAppliedLeaves ? (
+                {user.ReporteeAppliedLeaves.length > 0 ? (
                   <div className="table-responsive">
-                    <table className="table table-striped custom-table mb-0 datatable">
+                    <table
+                      className="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                      id="DataTables_Table_0"
+                      role="grid"
+                      aria-describedby="DataTables_Table_0_info"
+                    >
                       <thead>
-                        <tr>
+                        <tr role="row">
                           <th>Employee</th>
                           <th>Leave Type</th>
                           <th>Start Date</th>

@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import Loader from "../common/Loader";
 import "react-datepicker/dist/react-datepicker.css";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";

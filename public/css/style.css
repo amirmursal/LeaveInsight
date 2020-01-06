@@ -8136,7 +8136,7 @@ ul.comment-list li ul.children {
 }
 .cube-folding span::before {
   content: '';
-  background-color: white;
+  background: linear-gradient(to right, rgb(196, 214, 0) 0%, #25a1b2 100%);
   position: absolute;
   left: 0;
   top: 0;
@@ -8161,7 +8161,7 @@ ul.comment-list li ul.children {
   -moz-animation-delay: 0.3s;
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
-  background-color: #f2f2f2;
+  background: linear-gradient(to right, rgb(196, 214, 0) 0%, #25a1b2 100%);
 }
 .cube-folding .leaf3 {
   -moz-transform: rotateZ(270deg) scale(1.1);
@@ -8173,7 +8173,7 @@ ul.comment-list li ul.children {
   -moz-animation-delay: 0.9s;
   -webkit-animation-delay: 0.9s;
   animation-delay: 0.9s;
-  background-color: #f2f2f2;
+  background: linear-gradient(to right, rgb(196, 214, 0) 0%, #25a1b2 100%);
 }
 .cube-folding .leaf4 {
   -moz-transform: rotateZ(180deg) scale(1.1);
@@ -8185,7 +8185,7 @@ ul.comment-list li ul.children {
   -moz-animation-delay: 0.6s;
   -webkit-animation-delay: 0.6s;
   animation-delay: 0.6s;
-  background-color: #e6e6e6;
+  background: linear-gradient(to right, rgb(196, 214, 0) 0%, #25a1b2 100%);
 }
 
 @-moz-keyframes folding {
@@ -8255,7 +8255,7 @@ ul.comment-list li ul.children {
   height: 100px;
   text-align: center;
 }
-.cube-wrapper:after {
+/*.cube-wrapper:after {
   content: '';
   position: absolute;
   left: 0;
@@ -8274,7 +8274,7 @@ ul.comment-list li ul.children {
   -moz-animation: shadow 0.5s ease infinite alternate;
   -webkit-animation: shadow 0.5s ease infinite alternate;
   animation: shadow 0.5s ease infinite alternate;
-}
+}*/
 .cube-wrapper .loading {
   font-size: 12px;
   letter-spacing: 0.1em;

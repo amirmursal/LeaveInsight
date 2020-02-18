@@ -264,43 +264,39 @@ export default class MyLeaves extends React.Component {
               <div className="col-md-2">
                 <div className="stats-info">
                   <h6>Leaves Taken</h6>
-                  <h4>
-                    {user.LeaveTaken !== ""
-                      ? parseFloat(user.LeaveTaken).toPrecision(2)
-                      : 0}
-                  </h4>
+                  <h4>{user.LeaveTaken}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Applied Leave</h6>
+                  <h6>Applied Leaves</h6>
                   <h4>{user.AppliedLeaveCount}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leave Balance</h6>
-                  <h4>{parseFloat(user.CurrentBalance).toPrecision(2)}</h4>
+                  <h6>Leaves Balance</h6>
+                  <h4>{user.CurrentBalance}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leave Accrual</h6>
-                  <h4>{parseFloat(user.LeaveAccrual).toPrecision(2)}</h4>
+                  <h6>Leaves Accrual</h6>
+                  <h4>{user.LeaveAccrual}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Loss of Pay (Monthly)</h6>
-                  <h4>{parseFloat(user.LOP).toPrecision(2)}</h4>
+                  <h6>
+                    Loss of Pay <sub>(Monthly)</sub>
+                  </h6>
+                  <h4>{user.LOP}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Last year carry forward</h6>
-                  <h4>
-                    {parseFloat(user.LeavesCarriedForward).toPrecision(2)}
-                  </h4>
+                  <h6>Leaves forward</h6>
+                  <h4>{user.LeavesCarriedForward}</h4>
                 </div>
               </div>
             </div>

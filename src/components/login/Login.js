@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
-import logo from "../../assests/images/logo.png";
+//import logo from "../../assests/images/logo.png";
 import Loader from "../common/Loader";
 
 export default class Login extends React.Component {
@@ -82,6 +82,7 @@ export default class Login extends React.Component {
   render() {
     const { username, password, loading } = this.state;
     const isDisable = !username || !password;
+    const logo = process.env.PUBLIC_URL + "/images/logo.png";
     return (
       <div className="account-page">
         <div className="main-wrapper">

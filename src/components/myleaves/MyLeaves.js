@@ -166,7 +166,7 @@ export default class MyLeaves extends React.Component {
     return AppliedLeaves.map((element, i) => {
       return (
         <tr key={i}>
-          <td>{moment(element.StartDAt).format("MM/DD/YYYY")}</td>
+          <td>{moment(element.StartDate).format("DD/MM/YYYY")}</td>
           <td>{element.Duration}</td>
           <td>{element.ClientDescription}</td>
           <td>{element.Status}</td>
@@ -261,22 +261,46 @@ export default class MyLeaves extends React.Component {
             </div>
 
             <div className="row">
-              <div className="col-md-4">
+              <div className="col-md-2">
                 <div className="stats-info">
                   <h6>Leaves Taken</h6>
-                  <h4>{parseFloat(user.LeaveTaken).toPrecision(2)}</h4>
+                  <h4>
+                    {user.LeaveTaken !== ""
+                      ? parseFloat(user.LeaveTaken).toPrecision(2)
+                      : 0}
+                  </h4>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-2">
                 <div className="stats-info">
                   <h6>Applied Leave</h6>
                   <h4>{user.AppliedLeaveCount}</h4>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-2">
                 <div className="stats-info">
                   <h6>Leave Balance</h6>
                   <h4>{parseFloat(user.CurrentBalance).toPrecision(2)}</h4>
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div className="stats-info">
+                  <h6>Leave Accrual</h6>
+                  <h4>{parseFloat(user.LeaveAccrual).toPrecision(2)}</h4>
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div className="stats-info">
+                  <h6>Loss of Pay (Monthly)</h6>
+                  <h4>{parseFloat(user.LOP).toPrecision(2)}</h4>
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div className="stats-info">
+                  <h6>Last year carry forward</h6>
+                  <h4>
+                    {parseFloat(user.LeavesCarriedForward).toPrecision(2)}
+                  </h4>
                 </div>
               </div>
             </div>

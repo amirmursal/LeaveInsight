@@ -42,24 +42,22 @@ export default class Profile extends React.Component {
                               <h3 className="user-name m-t-0 mb-0">
                                 {user.FirstLast}
                               </h3>
-                              <h6 className="text-muted">R & D Team</h6>
-                              <small className="text-muted">
-                                Software Engineer- Front End Development
-                              </small>
+                              <h6 className="text-muted">{user.Department}</h6>
+                              <small className="text-muted">{user.Title}</small>
                               <div className="staff-id">
                                 Employee ID : {user.EmpID}
                               </div>
                               <div className="small doj text-muted">
-                                Date of Join : 18<sup>th</sup> March 2019
+                                Date of Joining : {user.DateHired}
                               </div>
                             </div>
                           </div>
                           <div className="col-md-7">
                             <ul className="personal-info">
                               <li>
-                                <div className="title">Phone:</div>
+                                <div className="title">Work Phone:</div>
                                 <div className="text">
-                                  <span>9881151316</span>
+                                  <span>{user.WorkPhone}</span>
                                 </div>
                               </li>
                               <li>
@@ -70,9 +68,7 @@ export default class Profile extends React.Component {
                               </li>
                               <li>
                                 <div className="title">Birthday:</div>
-                                <div className="text">
-                                  25<sup>th</sup> March
-                                </div>
+                                <div className="text">{user.Birthday}</div>
                               </li>
 
                               <li>

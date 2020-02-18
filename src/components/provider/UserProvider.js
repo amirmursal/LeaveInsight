@@ -12,6 +12,10 @@ export default class UserProvider extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.getUser();
+  }
+
   /**
    * Function fetch the user data based
    * on user id

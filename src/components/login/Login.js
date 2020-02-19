@@ -17,6 +17,16 @@ export default class Login extends React.Component {
   }
 
   /**
+   * Key down event for calling login function after hitting enter key
+   * @param event
+   */
+  handleKeyDown = (event, getUser) => {
+    if (event.key === "Enter") {
+      this.login(getUser);
+    }
+  };
+
+  /**
    * common input change handler for input and select
    * @param event
    */
@@ -84,48 +94,49 @@ export default class Login extends React.Component {
     const isDisable = !username || !password;
     const logo = process.env.PUBLIC_URL + "/images/logo.png";
     return (
-      <div className="account-page">
-        <div className="main-wrapper">
-          <div className="account-content">
-            <div className="container account-logo">
-              <a href="index.html">
-                <img src={logo} alt="Community Brands" />
-              </a>
-            </div>
-
-            <div className="account-box">
-              <div className="account-wrapper">
-                <p className="account-subtitle">Login to Leave Insight</p>
-
-                <div className="form-group">
-                  <label>Username</label>
-                  <input
-                    name="username"
-                    className="form-control"
-                    type="text"
-                    value={username}
-                    onChange={event => this.handleChange(event)}
-                    tabIndex="1"
-                  />
+      <UserConsumer>
+        {({ getUser }) => (
+          <div className="account-page">
+            <div className="main-wrapper">
+              <div className="account-content">
+                <div className="container account-logo">
+                  <a href="index.html">
+                    <img src={logo} alt="Community Brands" />
+                  </a>
                 </div>
-                <div className="form-group">
-                  <div className="row">
-                    <div className="col">
-                      <label>Password</label>
+
+                <div className="account-box">
+                  <div className="account-wrapper">
+                    <p className="account-subtitle">Login to Leave Insight</p>
+
+                    <div className="form-group">
+                      <label>Username</label>
+                      <input
+                        name="username"
+                        className="form-control"
+                        type="text"
+                        value={username}
+                        onChange={event => this.handleChange(event)}
+                        tabIndex="1"
+                      />
                     </div>
-                  </div>
-                  <input
-                    className="form-control"
-                    name="password"
-                    type="password"
-                    value={password}
-                    onChange={event => this.handleChange(event)}
-                    tabIndex="2"
-                  />
-                </div>
-                <div className="form-group text-center">
-                  <UserConsumer>
-                    {({ getUser }) => (
+                    <div className="form-group">
+                      <div className="row">
+                        <div className="col">
+                          <label>Password</label>
+                        </div>
+                      </div>
+                      <input
+                        className="form-control"
+                        name="password"
+                        type="password"
+                        value={password}
+                        onKeyDown={event => this.handleKeyDown(event, getUser)}
+                        onChange={event => this.handleChange(event)}
+                        tabIndex="2"
+                      />
+                    </div>
+                    <div className="form-group text-center">
                       <button
                         disabled={isDisable}
                         className="btn btn-primary account-btn"
@@ -134,22 +145,22 @@ export default class Login extends React.Component {
                       >
                         {loading && <Loader />} Login
                       </button>
+                    </div>
+                    {this.state.error && (
+                      <label
+                        className="card-footer-item"
+                        style={{ color: "#dc3545" }}
+                      >
+                        Username or Password incorrect
+                      </label>
                     )}
-                  </UserConsumer>
+                  </div>
                 </div>
-                {this.state.error && (
-                  <label
-                    className="card-footer-item"
-                    style={{ color: "#dc3545" }}
-                  >
-                    Username or Password incorrect
-                  </label>
-                )}
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </UserConsumer>
     );
   }
 }

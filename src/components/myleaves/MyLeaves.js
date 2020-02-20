@@ -288,15 +288,13 @@ export default class MyLeaves extends React.Component {
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>
-                    Loss of Pay <sub>(Monthly)</sub>
-                  </h6>
+                  <h6>Loss of Pay</h6>
                   <h4>{user.LOP}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leaves forward</h6>
+                  <h6>Leaves Forward</h6>
                   <h4>{user.LeavesCarriedForward}</h4>
                 </div>
               </div>

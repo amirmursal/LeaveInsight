@@ -180,7 +180,7 @@ export default class ReporteeLeaves extends React.Component {
 
             <div className="row">
               <div className="col-md-12">
-                {user.ReporteeAppliedLeaves.length > 0 ? (
+                {user.ReporteeAppliedLeaves ? (
                   <div className="table-responsive">
                     <table
                       className="table table-striped custom-table mb-0 datatable dataTable no-footer"

@@ -110,9 +110,11 @@ export default class Sidebar extends React.Component {
                       <li>
                         <Link to="/myleaves">My Leaves</Link>
                       </li>
-                      <li>
-                        <Link to="/myteam">My Team</Link>
-                      </li>
+                      {user.IsSupervisor === "1" && (
+                        <li>
+                          <Link to="/myteam">My Team</Link>
+                        </li>
+                      )}
                       {/*<li>
                     <a href="leave-settings.html">Leave Settings</a>
                   </li>

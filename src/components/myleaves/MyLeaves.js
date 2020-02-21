@@ -374,6 +374,10 @@ export default class MyLeaves extends React.Component {
                         onChange={this.handleChange}
                       >
                         <option value="1118">PTO</option>
+                        <option value="4852">Compensatory Off</option>
+                        <option value="310">Floater Holiday</option>
+                        <option value="5967">Maternity Leave</option>
+                        <option value="5973">Paternity Leave</option>
                       </select>
                     </div>
                     <div className="form-group">

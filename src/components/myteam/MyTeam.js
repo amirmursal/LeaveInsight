@@ -5,7 +5,7 @@ import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
 
-export default class ReporteeLeaves extends React.Component {
+export default class MyTeam extends React.Component {
   /**
    * function takes care for approve leave request
    * @param user
@@ -132,83 +132,71 @@ export default class ReporteeLeaves extends React.Component {
             <div className="page-header">
               <div className="row align-items-center">
                 <div className="col">
-                  <h3 className="page-title">Leaves</h3>
+                  <h3 className="page-title">Team</h3>
                   <ul className="breadcrumb">
                     <li className="breadcrumb-item">
                       <a href="">Employee</a>
                     </li>
-                    <li className="breadcrumb-item active">Awaiting Actions</li>
+                    <li className="breadcrumb-item active">My Team</li>
                   </ul>
                 </div>
               </div>
             </div>
 
             <div className="row">
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Planned Leaves</h6>
-                  <h4>
-                    {user.ReporteeLeaves !== undefined
-                      ? user.ReporteeLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Todays Absents</h6>
-                  <h4>
-                    {user.TodaysLeaves !== undefined
-                      ? user.TodaysLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Pending Requests</h6>
-                  <h4>
-                    {user.ReporteeAppliedLeaves !== undefined
-                      ? user.ReporteeAppliedLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
               <div className="col-md-12">
-                {user.ReporteeAppliedLeaves.length > 0 ? (
-                  <div className="table-responsive">
-                    <table
-                      className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                      id="DataTables_Table_0"
-                      role="grid"
-                      aria-describedby="DataTables_Table_0_info"
-                    >
-                      <thead>
-                        <tr role="row">
-                          <th>Employee</th>
-                          <th>Leave Type</th>
-                          <th>Start Date</th>
-                          <th>Reason</th>
-                          <th>Status</th>
-                          <th className="text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.reporteeAppliedLeaves(
-                          user.ReporteeAppliedLeaves,
-                          getUser
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <span>No Pending leave request</span>
-                )}
+                <div className="table-responsive">
+                  <table
+                    class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                    id="DataTables_Table_0"
+                    role="grid"
+                    aria-describedby="DataTables_Table_0_info"
+                  >
+                    <thead>
+                      <tr role="row">
+                        <th>Employee</th>
+                        <th>CO Taken</th>
+                        <th>PTO Balance</th>
+                        <th>PTO Taken</th>
+                        <th>PTO Planned</th>
+                        <th>Floater Holidays</th>
+                      </tr>
+                      <tr role="row">
+                        <td>Amir Mursal</td>
+                        <td>5</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>5</td>
+                        <td>5</td>
+                      </tr>
+                      <tr role="row">
+                        <td>Rajesh Waman</td>
+                        <td>5</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>5</td>
+                        <td>5</td>
+                      </tr>
+                      <tr role="row">
+                        <td>Vijay Gaikwad</td>
+                        <td>5</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>5</td>
+                        <td>5</td>
+                      </tr>
+                      <tr role="row">
+                        <td>Kavita Zinage</td>
+                        <td>5</td>
+                        <td>10</td>
+                        <td>10</td>
+                        <td>5</td>
+                        <td>5</td>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>

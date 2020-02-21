@@ -98,7 +98,7 @@ export default class Sidebar extends React.Component {
                       {user.IsSupervisor === "1" && (
                         <li>
                           <Link to="/reporteeleaves">
-                            Leaves (Reportee ){" "}
+                            My Actions{" "}
                             <span className="badge badge-pill bg-primary float-right">
                               {user.ReporteeAppliedLeaves !== undefined
                                 ? user.ReporteeAppliedLeaves.length
@@ -109,6 +109,9 @@ export default class Sidebar extends React.Component {
                       )}
                       <li>
                         <Link to="/myleaves">My Leaves</Link>
+                      </li>
+                      <li>
+                        <Link to="/myteam">My Team</Link>
                       </li>
                       {/*<li>
                     <a href="leave-settings.html">Leave Settings</a>

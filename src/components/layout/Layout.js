@@ -5,6 +5,7 @@ import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
 import Profile from "../profile/Profile";
 import MyLeaves from "../myleaves/MyLeaves";
+import MyTeam from "../myteam/MyTeam";
 import ReporteeLeaves from "../reporteeLeaves/ReporteeLeaves";
 
 export default class Layout extends React.Component {
@@ -18,6 +19,7 @@ export default class Layout extends React.Component {
           <Route path="/" exact component={MyLeaves} />
           <Route path="/reporteeleaves" component={ReporteeLeaves} />
           <Route path="/myleaves" component={MyLeaves} />
+          <Route path="/myteam" component={MyTeam} />
           <Route path="/profile" component={Profile} />
           <Route path="/logout" component={Login} />
         </div>

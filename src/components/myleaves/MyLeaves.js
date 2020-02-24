@@ -233,6 +233,11 @@ export default class MyLeaves extends React.Component {
       message
     } = this.state;
 
+    const isWeekday = date => {
+      const day = date.getDay();
+      return day !== 0 && day !== 6;
+    };
+    //const excludeDates = [new Date()];
     return (
       <UserConsumer>
         {({ user, getUser }) => (
@@ -402,6 +407,8 @@ export default class MyLeaves extends React.Component {
                       </label>
                       <div>
                         <DatePicker
+                          filterDate={isWeekday}
+                          //excludeDates={excludeDates}
                           className="form-control"
                           selected={StartDate}
                           onChange={this.handleDateChange}

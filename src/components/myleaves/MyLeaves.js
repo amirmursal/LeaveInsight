@@ -300,22 +300,24 @@ export default class MyLeaves extends React.Component {
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-sm-12 col-md-6">
-                <div class="dataTables_length">
+            <div className="row">
+              <div className="col-sm-12 col-md-6">
+                <div className="dataTables_length">
                   <label>
-                    {user.AppliedLeaves
+                    {Array.isArray(user.AppliedLeaves) &&
+                    user.AppliedLeaves.length
                       ? "All Leaves"
                       : "No leaves applied yet"}{" "}
                   </label>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6"></div>
+              <div className="col-sm-12 col-md-6"></div>
             </div>
 
             <div className="row">
               <div className="col-md-12">
-                {user.AppliedLeaves && (
+                {Array.isArray(user.AppliedLeaves) &&
+                user.AppliedLeaves.length ? (
                   <div className="table-responsive">
                     <table
                       className="table table-striped custom-table mb-0 datatable dataTable no-footer"
@@ -337,7 +339,7 @@ export default class MyLeaves extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                )}
+                ) : null}
               </div>
             </div>
 

@@ -147,7 +147,7 @@ export default class MyTeam extends React.Component {
               <div className="col-md-12">
                 <div className="table-responsive">
                   <table
-                    class="table table-striped custom-table mb-0 datatable dataTable no-footer"
+                    className="table table-striped custom-table mb-0 datatable dataTable no-footer"
                     id="DataTables_Table_0"
                     role="grid"
                     aria-describedby="DataTables_Table_0_info"

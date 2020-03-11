@@ -17,7 +17,8 @@ export default class MyLeaves extends React.Component {
       WorkHours: 8,
       StartDate: new Date(),
       error: false,
-      message: null
+      message: null,
+      isDisabled: false
     };
   }
 
@@ -48,6 +49,9 @@ export default class MyLeaves extends React.Component {
    */
   leaveRequest = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    this.setState({
+      isDisabled: true
+    });
     let data = {
       ID: -1,
       EntityName: "Employee Work Schedules",
@@ -79,6 +83,7 @@ export default class MyLeaves extends React.Component {
           ProjectID: 1118,
           Description: "",
           WorkHours: 8,
+          isDisabled: false,
           StartDate: new Date(),
           message: "Leave applied successfully"
         });
@@ -113,6 +118,36 @@ export default class MyLeaves extends React.Component {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
             "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        getUser();
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  /**
+   * function for deleting leave request
+   * @param leave
+   * @param getUser
+   */
+
+  deleteLeave = (leave, getUser) => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    let data = {};
+    axios
+      .post(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/DeleteRecord?EntityID=1676&RecordID=" +
+          parseInt(leave),
+        data,
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId
           }
         }
       )
@@ -171,53 +206,53 @@ export default class MyLeaves extends React.Component {
           <td>{element.ClientDescription}</td>
           <td>{element.Status}</td>
           <td className="text-right">
-            <div className="dropdown dropdown-action">
-              <a
-                href="#"
-                className="action-icon dropdown-toggle"
-                data-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="material-icons">more_vert</i>
-              </a>
-              {element.Status === "Cancelled" ||
-              element.Status === "Rejected" ||
-              element.Status === "Applied" ? (
-                <div className="dropdown-menu dropdown-menu-right">
-                  <a
-                    className="dropdown-item"
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#edit_leave"
-                  >
-                    <i className="fa fa-pencil m-r-5"></i> Edit
-                  </a>
-                  <a
-                    className="dropdown-item"
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#delete_approve"
-                  >
-                    <i className="fa fa-trash-o m-r-5"></i> Delete
-                  </a>
-                </div>
-              ) : (
-                <div className="dropdown-menu dropdown-menu-right">
-                  <button
-                    className="dropdown-item"
-                    onClick={() => this.availLeave(element.ID, getUser)}
-                  >
-                    <i className="fa fa-check m-r-5"></i> Avail
-                  </button>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => this.cancelLeave(element.ID, getUser)}
-                  >
-                    <i className="fa fa-trash-o m-r-5"></i> Cancel
-                  </button>
-                </div>
-              )}
-            </div>
+            {element.Status !== "Rejected" && (
+              <div className="dropdown dropdown-action">
+                <a
+                  href="#"
+                  className="action-icon dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i className="material-icons">more_vert</i>
+                </a>
+
+                {element.Status === "Cancelled" ||
+                element.Status === "Applied" ? (
+                  <div className="dropdown-menu dropdown-menu-right">
+                    <a
+                      className="dropdown-item"
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#edit_leave"
+                    >
+                      <i className="fa fa-pencil m-r-5"></i> Edit
+                    </a>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => this.deleteLeave(element.ID, getUser)}
+                    >
+                      <i className="fa fa-trash-o m-r-5"></i> Delete
+                    </button>
+                  </div>
+                ) : (
+                  <div className="dropdown-menu dropdown-menu-right">
+                    <button
+                      className="dropdown-item"
+                      onClick={() => this.availLeave(element.ID, getUser)}
+                    >
+                      <i className="fa fa-check m-r-5"></i> Avail
+                    </button>
+                    <button
+                      className="dropdown-item"
+                      onClick={() => this.cancelLeave(element.ID, getUser)}
+                    >
+                      <i className="fa fa-trash-o m-r-5"></i> Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </td>
         </tr>
       );
@@ -230,7 +265,8 @@ export default class MyLeaves extends React.Component {
       ProjectID,
       Description,
       WorkHours,
-      message
+      message,
+      isDisabled
     } = this.state;
 
     const isWeekday = date => {
@@ -269,6 +305,12 @@ export default class MyLeaves extends React.Component {
             <div className="row">
               <div className="col-md-2">
                 <div className="stats-info">
+                  <h6>Leaves Forward</h6>
+                  <h4>{user.LeavesCarriedForward}</h4>
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div className="stats-info">
                   <h6>Leaves Taken</h6>
                   <h4>{user.LeaveTaken}</h4>
                 </div>
@@ -279,12 +321,7 @@ export default class MyLeaves extends React.Component {
                   <h4>{user.AppliedLeaveCount}</h4>
                 </div>
               </div>
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>Leaves Balance</h6>
-                  <h4>{user.CurrentBalance}</h4>
-                </div>
-              </div>
+
               <div className="col-md-2">
                 <div className="stats-info">
                   <h6>Leaves Accrual</h6>
@@ -299,8 +336,8 @@ export default class MyLeaves extends React.Component {
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leaves Forward</h6>
-                  <h4>{user.LeavesCarriedForward}</h4>
+                  <h6>Leaves Balance</h6>
+                  <h4>{user.CurrentBalance}</h4>
                 </div>
               </div>
             </div>
@@ -385,6 +422,8 @@ export default class MyLeaves extends React.Component {
                         <option value="310">Floater Holiday</option>
                         <option value="5967">Maternity Leave</option>
                         <option value="5973">Paternity Leave</option>
+                        {/* add value for bereavement leave take from rajes waman*/}
+                        <option value="null">Bereavement Leave</option>
                       </select>
                     </div>
                     <div className="form-group">
@@ -432,7 +471,7 @@ export default class MyLeaves extends React.Component {
 
                     <div className="submit-section">
                       <button
-                        disabled={!Description}
+                        disabled={!Description || isDisabled}
                         className="btn btn-primary submit-btn"
                         onClick={() => this.leaveRequest(user, getUser)}
                       >

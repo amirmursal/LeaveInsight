@@ -1,100 +1,21 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-import DatePicker from "react-datepicker";
 import Loader from "../common/Loader";
-import "react-datepicker/dist/react-datepicker.css";
 import { serverUrl } from "../../config";
+import ApplyLeave from "./ApplyLeave";
+import EditLeave from "./EditLeave";
 import { UserConsumer } from "../provider/UserProvider";
 
 export default class MyLeaves extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      EmpID: null,
-      ProjectID: 1118,
-      Description: "",
-      WorkHours: 8,
-      StartDate: new Date(),
-      error: false,
-      message: null,
-      isDisabled: false
+      isOpen: false,
+      isEditOpen: false,
+      leave: {}
     };
   }
-
-  /**
-   * Date change handler for react-datepicker
-   * @param date
-   */
-  handleDateChange = date => {
-    this.setState({
-      StartDate: date
-    });
-  };
-
-  /**
-   * common input change handler for input and select
-   * @param event
-   */
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-
-  /**
-   * function takes care for applying leave request
-   * @param user
-   * @param getUser
-   */
-  leaveRequest = (user, getUser) => {
-    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    this.setState({
-      isDisabled: true
-    });
-    let data = {
-      ID: -1,
-      EntityName: "Employee Work Schedules",
-      Type: "Project",
-      Status: "Applied",
-      EmployeeID: parseInt(user.EmpID),
-      ProjectID: this.state.ProjectID,
-      Description: this.state.Description,
-      WorkHours: this.state.WorkHours,
-      StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
-      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY")
-    };
-    axios
-      .post(
-        " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
-        data,
-        {
-          headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
-        }
-      )
-      .then(response => {
-        getUser();
-        this.setState({
-          ProjectID: 1118,
-          Description: "",
-          WorkHours: 8,
-          isDisabled: false,
-          StartDate: new Date(),
-          message: "Leave applied successfully"
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    this.setState({
-      message: null
-    });
-  };
 
   /**
    * function takes care for cancell leave request
@@ -220,14 +141,12 @@ export default class MyLeaves extends React.Component {
                 {element.Status === "Cancelled" ||
                 element.Status === "Applied" ? (
                   <div className="dropdown-menu dropdown-menu-right">
-                    <a
+                    <button
                       className="dropdown-item"
-                      href="#"
-                      data-toggle="modal"
-                      data-target="#edit_leave"
+                      onClick={() => this.toggleEditLeaveDialog(element)}
                     >
                       <i className="fa fa-pencil m-r-5"></i> Edit
-                    </a>
+                    </button>
                     <button
                       className="dropdown-item"
                       onClick={() => this.deleteLeave(element.ID, getUser)}
@@ -259,21 +178,28 @@ export default class MyLeaves extends React.Component {
     });
   };
 
-  render() {
-    const {
-      StartDate,
-      ProjectID,
-      Description,
-      WorkHours,
-      message,
-      isDisabled
-    } = this.state;
+  /**
+   * function takes care for toggle apply leave dialog
+   */
+  toggleApplyLeaveDialog = () => {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  };
 
-    const isWeekday = date => {
-      const day = date.getDay();
-      return day !== 0 && day !== 6;
-    };
-    //const excludeDates = [new Date()];
+  /**
+   * function takes care for toggle edit leave dialog
+   */
+  toggleEditLeaveDialog = leave => {
+    this.setState({
+      isEditOpen: !this.state.isEditOpen,
+      leave: leave
+    });
+  };
+
+  render() {
+    const { isOpen, isEditOpen, leave } = this.state;
+
     return (
       <UserConsumer>
         {({ user, getUser }) => (
@@ -290,14 +216,12 @@ export default class MyLeaves extends React.Component {
                   </ul>
                 </div>
                 <div className="col-auto float-right ml-auto">
-                  <a
-                    href="#C"
+                  <button
                     className="btn add-btn"
-                    data-toggle="modal"
-                    data-target="#add_leave"
+                    onClick={() => this.toggleApplyLeaveDialog()}
                   >
                     <i className="fa fa-plus"></i> Apply Leave
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -385,190 +309,26 @@ export default class MyLeaves extends React.Component {
               </div>
             </div>
 
-            <div
-              id="add_leave"
-              className="modal custom-modal fade"
-              role="dialog"
-            >
-              <div
-                className="modal-dialog modal-dialog-centered"
-                role="document"
-              >
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Apply Leave</h5>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    <div className="form-group">
-                      <label>
-                        Leave Type <span className="text-danger">*</span>
-                      </label>
-                      <select
-                        className="form-control"
-                        value={ProjectID}
-                        name="ProjectID"
-                        onChange={this.handleChange}
-                      >
-                        <option value="1118">PTO</option>
-                        <option value="4852">Compensatory Off</option>
-                        <option value="310">Floater Holiday</option>
-                        <option value="5967">Maternity Leave</option>
-                        <option value="5973">Paternity Leave</option>
-                        {/* add value for bereavement leave take from rajes waman*/}
-                        <option value="null">Bereavement Leave</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>
-                        Duration<span className="text-danger">*</span>
-                      </label>
-                      <select
-                        className="form-control"
-                        value={WorkHours}
-                        name="WorkHours"
-                        onChange={this.handleChange}
-                      >
-                        <option value="8"> Full Day</option>
-                        <option value="4"> Half Day</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>
-                        Date <span className="text-danger">*</span>
-                      </label>
-                      <div>
-                        <DatePicker
-                          filterDate={isWeekday}
-                          //excludeDates={excludeDates}
-                          className="form-control"
-                          selected={StartDate}
-                          onChange={this.handleDateChange}
-                        />
-                      </div>
-                    </div>
+            {isOpen && (
+              <React.Fragment>
+                <ApplyLeave
+                  open={isOpen}
+                  toggleApplyLeaveDialog={() => this.toggleApplyLeaveDialog()}
+                />
+                <div className="modal-backdrop fade show"></div>
+              </React.Fragment>
+            )}
 
-                    <div className="form-group">
-                      <label>
-                        Leave Reason <span className="text-danger">*</span>
-                      </label>
-                      <textarea
-                        rows="4"
-                        name="Description"
-                        className="form-control"
-                        value={Description}
-                        onChange={this.handleChange}
-                      ></textarea>
-                    </div>
-                    {message && <span>{message}</span>}
-
-                    <div className="submit-section">
-                      <button
-                        disabled={!Description || isDisabled}
-                        className="btn btn-primary submit-btn"
-                        onClick={() => this.leaveRequest(user, getUser)}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              id="edit_leave"
-              className="modal custom-modal fade"
-              role="dialog"
-            >
-              <div
-                className="modal-dialog modal-dialog-centered"
-                role="document"
-              >
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Edit Leave</h5>
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    <div className="form-group">
-                      <label>
-                        Leave Type <span className="text-danger">*</span>
-                      </label>
-                      <select
-                        className="form-control"
-                        value={ProjectID}
-                        name="ProjectID"
-                        onChange={this.handleChange}
-                      >
-                        <option value="1118"> PTO</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>
-                        Duration<span className="text-danger">*</span>
-                      </label>
-                      <select
-                        className="form-control"
-                        value={WorkHours}
-                        name="WorkHours"
-                        onChange={this.handleChange}
-                      >
-                        <option value="8"> Full Day</option>
-                        <option value="4"> Half Day</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label>
-                        Date <span className="text-danger">*</span>
-                      </label>
-                      <div>
-                        <DatePicker
-                          className="form-control"
-                          selected={StartDate}
-                          onChange={this.handleDateChange}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <label>
-                        Leave Reason <span className="text-danger">*</span>
-                      </label>
-                      <textarea
-                        rows="4"
-                        name="Description"
-                        className="form-control"
-                        value={Description}
-                        onChange={this.handleChange}
-                      ></textarea>
-                    </div>
-                    <div className="submit-section">
-                      <button
-                        className="btn btn-primary submit-btn"
-                        onClick={() => this.updateLeaveRequest()}
-                      >
-                        Submit
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {isEditOpen && (
+              <React.Fragment>
+                <EditLeave
+                  leave={leave}
+                  open={isEditOpen}
+                  toggleEditLeaveDialog={() => this.toggleEditLeaveDialog()}
+                />
+                <div className="modal-backdrop fade show"></div>
+              </React.Fragment>
+            )}
 
             <div
               className="modal custom-modal fade"

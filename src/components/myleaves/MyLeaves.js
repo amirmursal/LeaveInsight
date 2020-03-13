@@ -308,7 +308,9 @@ export default class MyLeaves extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                ) : null}
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
 

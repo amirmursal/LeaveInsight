@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
+import Loader from "../common/Loader";
 import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
@@ -179,6 +180,20 @@ export default class ReporteeLeaves extends React.Component {
             </div>
 
             <div className="row">
+              <div className="col-sm-12 col-md-6">
+                <div className="dataTables_length">
+                  <label>
+                    {Array.isArray(user.ReporteeAppliedLeaves) &&
+                    user.ReporteeAppliedLeaves.length
+                      ? "Pending Leaves"
+                      : "No Pending leave request"}{" "}
+                  </label>
+                </div>
+              </div>
+              <div className="col-sm-12 col-md-6"></div>
+            </div>
+
+            <div className="row">
               <div className="col-md-12">
                 {Array.isArray(user.ReporteeAppliedLeaves) &&
                 user.ReporteeAppliedLeaves.length ? (
@@ -210,7 +225,7 @@ export default class ReporteeLeaves extends React.Component {
                     </table>
                   </div>
                 ) : (
-                  <span>No Pending leave request</span>
+                  <Loader />
                 )}
               </div>
             </div>

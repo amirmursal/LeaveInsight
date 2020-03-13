@@ -91,7 +91,7 @@ export default class Login extends React.Component {
 
   render() {
     const { username, password, loading } = this.state;
-    const isDisable = !username || !password;
+    const isDisable = !username || !password || loading;
     const logo = process.env.PUBLIC_URL + "/images/logo.png";
     return (
       <UserConsumer>

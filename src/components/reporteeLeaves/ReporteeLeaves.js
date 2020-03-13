@@ -201,7 +201,9 @@ export default class ReporteeLeaves extends React.Component {
                       </thead>
                       <tbody>
                         {this.reporteeAppliedLeaves(
-                          user.ReporteeAppliedLeaves,
+                          user.ReporteeAppliedLeaves.sort(
+                            (a, b) => b.ID - a.ID
+                          ),
                           getUser
                         )}
                       </tbody>

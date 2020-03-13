@@ -301,7 +301,10 @@ export default class MyLeaves extends React.Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.renderAppliedLeaves(user.AppliedLeaves, getUser)}
+                        {this.renderAppliedLeaves(
+                          user.AppliedLeaves.sort((a, b) => b.ID - a.ID),
+                          getUser
+                        )}
                       </tbody>
                     </table>
                   </div>

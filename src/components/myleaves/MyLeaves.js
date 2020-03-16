@@ -322,7 +322,7 @@ export default class MyLeaves extends React.Component {
                     </table>
                   </div>
                 ) : (
-                  <Loader />
+                  !Array.isArray(user.AppliedLeaves) && <Loader />
                 )}
               </div>
             </div>

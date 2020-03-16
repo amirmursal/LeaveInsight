@@ -224,8 +224,9 @@ export default class ReporteeLeaves extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                ) : null //<Loader />
-                }
+                ) : (
+                  !Array.isArray(user.AppliedLeaves) && <Loader />
+                )}
               </div>
             </div>
           </div>

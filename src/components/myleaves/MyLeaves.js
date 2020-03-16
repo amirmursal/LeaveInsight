@@ -5,6 +5,7 @@ import Loader from "../common/Loader";
 import { serverUrl } from "../../config";
 import ApplyLeave from "./ApplyLeave";
 import EditLeave from "./EditLeave";
+import DeleteLeave from "./DeleteLeave";
 import { UserConsumer } from "../provider/UserProvider";
 
 export default class MyLeaves extends React.Component {
@@ -13,7 +14,9 @@ export default class MyLeaves extends React.Component {
     this.state = {
       isOpen: false,
       isEditOpen: false,
-      leave: {}
+      isDeleteOpen: false,
+      leave: {},
+      leaveid: null
     };
   }
 
@@ -149,7 +152,7 @@ export default class MyLeaves extends React.Component {
                     </button>
                     <button
                       className="dropdown-item"
-                      onClick={() => this.deleteLeave(element.ID, getUser)}
+                      onClick={() => this.toggleDeleteLeaveDialog(element.ID)}
                     >
                       <i className="fa fa-trash-o m-r-5"></i> Delete
                     </button>
@@ -197,8 +200,18 @@ export default class MyLeaves extends React.Component {
     });
   };
 
+  /**
+   * function takes care for toggle delete leave dialog
+   */
+  toggleDeleteLeaveDialog = leaveid => {
+    this.setState({
+      isDeleteOpen: !this.state.isDeleteOpen,
+      leaveid: leaveid
+    });
+  };
+
   render() {
-    const { isOpen, isEditOpen, leave } = this.state;
+    const { isOpen, isEditOpen, leave, isDeleteOpen, leaveid } = this.state;
 
     return (
       <UserConsumer>
@@ -335,40 +348,16 @@ export default class MyLeaves extends React.Component {
               </React.Fragment>
             )}
 
-            <div
-              className="modal custom-modal fade"
-              id="delete_approve"
-              role="dialog"
-            >
-              <div className="modal-dialog modal-dialog-centered">
-                <div className="modal-content">
-                  <div className="modal-body">
-                    <div className="form-header">
-                      <h3>This feature will be added in next version</h3>
-                      {/*<p>This feature will be added in next version</p>*/}
-                    </div>
-                    <div className="modal-btn delete-action">
-                      <div className="row">
-                        {/* <div className="col-6">
-                      <a href="" className="btn btn-primary continue-btn">
-                        Delete
-                      </a>
-            </div>*/}
-                        <div className="col-6">
-                          <a
-                            href=""
-                            data-dismiss="modal"
-                            className="btn btn-primary cancel-btn"
-                          >
-                            Cancel
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {isDeleteOpen && (
+              <React.Fragment>
+                <DeleteLeave
+                  leaveid={leaveid}
+                  open={isDeleteOpen}
+                  toggleDeleteLeaveDialog={() => this.toggleDeleteLeaveDialog()}
+                />
+                <div className="modal-backdrop fade show"></div>
+              </React.Fragment>
+            )}
           </div>
         )}
       </UserConsumer>

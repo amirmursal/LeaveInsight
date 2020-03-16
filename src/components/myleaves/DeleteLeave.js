@@ -4,10 +4,6 @@ import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
 
 export default class DeleteLeave extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   /**
    * function for deleting leave request
    * @param leaveid

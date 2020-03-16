@@ -30,9 +30,7 @@ export default class Profile extends React.Component {
                     <div className="profile-view">
                       <div className="profile-img-wrap">
                         <div className="profile-img">
-                          <a href="#">
-                            <img alt="" src={Avatar} />
-                          </a>
+                          <img alt="" src={Avatar} />
                         </div>
                       </div>
                       <div className="profile-basic">

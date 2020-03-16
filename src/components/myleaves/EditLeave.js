@@ -11,7 +11,7 @@ export default class EditLeave extends React.Component {
     super(props);
     this.state = {
       EmpID: parseInt(this.props.leave.EmployeeID),
-      ProjectID: 1118, // this needs to talk to rajesh we need project id data in leave from backend
+      ProjectID: parseInt(this.props.leave.ProjectID),
       Description: this.props.leave.ClientDescription,
       WorkHours: parseInt(Math.round(this.props.leave.Duration)),
       StartDate: new Date(this.props.leave.StartDate),
@@ -78,6 +78,7 @@ export default class EditLeave extends React.Component {
       )
       .then(response => {
         getUser();
+        //this.props.toggleEditLeaveDialog(); // to close edit dialog if furture require.
         this.setState({
           ProjectID: 1118,
           Description: "",

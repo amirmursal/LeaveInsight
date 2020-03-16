@@ -18,7 +18,7 @@ export default class MyTeam extends React.Component {
           <td>{element.LeaveBalance}</td>
           <td>{element.LeaveTaken}</td>
           <td>{element.PTOPlanned}</td>
-          <td>{element.PTOPlanned}</td>
+          <td>{element.FloaterHoliday}</td>
         </tr>
       );
     });

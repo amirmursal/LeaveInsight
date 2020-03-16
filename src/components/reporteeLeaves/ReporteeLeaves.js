@@ -224,9 +224,8 @@ export default class ReporteeLeaves extends React.Component {
                       </tbody>
                     </table>
                   </div>
-                ) : (
-                  <Loader />
-                )}
+                ) : null //<Loader />
+                }
               </div>
             </div>
           </div>

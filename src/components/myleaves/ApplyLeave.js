@@ -40,13 +40,12 @@ export default class ApplyLeave extends React.Component {
       [event.target.name]: event.target.value
     });
   };
-
   /**
    * function takes care for applying leave request
    * @param user
    * @param getUser
    */
-  leaveRequest = (user, getUser) => {
+  applyLeave = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
       isDisabled: true
@@ -93,6 +92,49 @@ export default class ApplyLeave extends React.Component {
     this.setState({
       message: null
     });
+  };
+
+  /**
+   * function takes care for applying leave request with already leave validation
+   * @param user
+   * @param getUser
+   */
+  leaveRequest = (user, getUser) => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    axios
+      .get(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeaves__c?EmpID=" +
+          parseInt(user.EmpID) +
+          "&StartDate=" +
+          moment(this.state.StartDate).format("MM/DD/YYYY") +
+          "&WorkHours=" +
+          this.state.WorkHours,
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+            "Content-Type": "application/json"
+          }
+        }
+      )
+      .then(response => {
+        if (response.data.results[0].IsExist !== 1) {
+          this.applyLeave(user, getUser);
+        } else {
+          this.setState({
+            ProjectID: 1118,
+            Description: "",
+            WorkHours: 8,
+            isDisabled: false,
+            StartDate: new Date(),
+            message: "Leave already exist"
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   render() {
@@ -193,7 +235,11 @@ export default class ApplyLeave extends React.Component {
                       onChange={this.handleChange}
                     ></textarea>
                   </div>
-                  {message && <span>{message}</span>}
+                  {message && message !== "Leave applied successfully" ? (
+                    <span className="text-danger">{message}</span>
+                  ) : (
+                    <span className="text-success">{message}</span>
+                  )}
 
                   <div className="submit-section">
                     <button

@@ -149,8 +149,7 @@ export default class ApplyLeave extends React.Component {
                       <option value="310">Floater Holiday</option>
                       <option value="5967">Maternity Leave</option>
                       <option value="5973">Paternity Leave</option>
-                      {/* add value for bereavement leave take from rajes waman*/}
-                      <option value="null">Bereavement Leave</option>
+                      <option value="409">Bereavement Leave</option>
                     </select>
                   </div>
                   <div className="form-group">

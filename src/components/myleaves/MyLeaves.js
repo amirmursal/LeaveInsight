@@ -125,6 +125,7 @@ export default class MyLeaves extends React.Component {
     return AppliedLeaves.map((element, i) => {
       return (
         <tr key={i}>
+          <td>{element.Project}</td>
           <td>{moment(element.StartDate).format("DD/MM/YYYY")}</td>
           <td>{element.Duration}</td>
           <td>{element.ClientDescription}</td>
@@ -242,7 +243,7 @@ export default class MyLeaves extends React.Component {
             <div className="row">
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leaves Forward</h6>
+                  <h6>Leaves Carry Forward</h6>
                   <h4>{user.LeavesCarriedForward}</h4>
                 </div>
               </div>
@@ -267,13 +268,13 @@ export default class MyLeaves extends React.Component {
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Loss of Pay</h6>
+                  <h6>Leave Without Pay</h6>
                   <h4>{user.LOP}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leaves Balance</h6>
+                  <h6>Leave Balance</h6>
                   <h4>{user.CurrentBalance}</h4>
                 </div>
               </div>
@@ -306,6 +307,7 @@ export default class MyLeaves extends React.Component {
                     >
                       <thead>
                         <tr role="row">
+                          <th>Leave Type</th>
                           <th>Start Date</th>
                           <th>Work Hours</th>
                           <th>Reason</th>

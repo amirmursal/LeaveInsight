@@ -265,7 +265,7 @@ export default class MyLeaves extends React.Component {
                 </div>
               </div>
 
-              <div className="col-md-2">
+              <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Leave Without Pay</h6>
                   <h4>{user.LOP}</h4>

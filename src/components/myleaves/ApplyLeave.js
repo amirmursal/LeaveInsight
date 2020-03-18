@@ -191,7 +191,7 @@ export default class ApplyLeave extends React.Component {
                       <option value="310">Floater Holiday</option>
                       <option value="5967">Maternity Leave</option>
                       <option value="5973">Paternity Leave</option>
-                      <option value="409">Bereavement Leave</option>
+                      <option value="5966">Bereavement Leave</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -228,7 +228,7 @@ export default class ApplyLeave extends React.Component {
                       Leave Reason <span className="text-danger">*</span>
                     </label>
                     <textarea
-                      rows="4"
+                      rows="2"
                       name="Description"
                       className="form-control"
                       value={Description}
@@ -241,6 +241,19 @@ export default class ApplyLeave extends React.Component {
                     <span className="text-success">{message}</span>
                   )}
 
+                  {ProjectID === "4852" ||
+                  ProjectID === "310" ||
+                  ProjectID === "5967" ||
+                  ProjectID === "5973" ||
+                  ProjectID === "5966" ? (
+                    <span className="text-warning">
+                      Refer policy for Bereavement/Paternity/Maternity/comp off{" "}
+                      {""}
+                      <a href="#" target="_blank">
+                        (link to be given for leave policy)
+                      </a>
+                    </span>
+                  ) : null}
                   <div className="submit-section">
                     <button
                       disabled={!Description || isDisabled}

@@ -106,7 +106,6 @@ export default class EditLeave extends React.Component {
       isDisabled
     } = this.state;
 
-    console.log(this.props.leave);
     const isWeekday = date => {
       const day = date.getDay();
       return day !== 0 && day !== 6;
@@ -151,8 +150,7 @@ export default class EditLeave extends React.Component {
                       <option value="310">Floater Holiday</option>
                       <option value="5967">Maternity Leave</option>
                       <option value="5973">Paternity Leave</option>
-                      {/* add value for bereavement leave take from rajes waman*/}
-                      <option value="null">Bereavement Leave</option>
+                      <option value="5966">Bereavement Leave</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -189,14 +187,32 @@ export default class EditLeave extends React.Component {
                       Leave Reason <span className="text-danger">*</span>
                     </label>
                     <textarea
-                      rows="4"
+                      rows="2"
                       name="Description"
                       className="form-control"
                       value={Description}
                       onChange={this.handleChange}
                     ></textarea>
                   </div>
-                  {message && <span>{message}</span>}
+                  {message && message !== "Leave Edited successfully" ? (
+                    <span className="text-danger">{message}</span>
+                  ) : (
+                    <span className="text-success">{message}</span>
+                  )}
+
+                  {ProjectID === "4852" ||
+                  ProjectID === "310" ||
+                  ProjectID === "5967" ||
+                  ProjectID === "5973" ||
+                  ProjectID === "5966" ? (
+                    <span className="text-warning">
+                      Refer policy for Bereavement/Paternity/Maternity/comp off{" "}
+                      {""}
+                      <a href="#" target="_blank">
+                        (link to be given for leave policy)
+                      </a>
+                    </span>
+                  ) : null}
 
                   <div className="submit-section">
                     <button

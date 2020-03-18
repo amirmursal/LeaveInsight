@@ -239,41 +239,43 @@ export default class MyLeaves extends React.Component {
                 </div>
               </div>
             </div>
-
             <div className="row">
-              <div className="col-md-3">
-                <div className="stats-info" style={{ padding: 17.5 + "px" }}>
+              <div className="col-md-2">
+                <div className="stats-info">
                   <h6>
-                    Leaves Carry Forward
-                    <strong> {user.LeavesCarriedForward} </strong>
-                  </h6>
-                  <h6>
-                    Leaves Accrual <strong> {user.LeaveAccrual} </strong>
+                    Carry Forwarded
+                    <h4> {user.LeavesCarriedForward} </h4>
                   </h6>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leaves Taken</h6>
-                  <h4>{user.LeaveTaken}</h4>
+                  <h6>Accrual</h6>
+                  <h4>{user.LeaveAccrual} </h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Applied Leaves</h6>
+                  <h6>Applied</h6>
                   <h4>{user.AppliedLeaveCount}</h4>
                 </div>
               </div>
-
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leave Without Pay</h6>
+                  <h6>Taken</h6>
+                  <h4>{user.LeaveTaken}</h4>
+                </div>
+              </div>
+
+              <div className="col-md-2">
+                <div className="stats-info">
+                  <h6>LWP</h6>
                   <h4>{user.LOP}</h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Leave Balance</h6>
+                  <h6>Balance</h6>
                   <h4>{user.CurrentBalance}</h4>
                 </div>
               </div>

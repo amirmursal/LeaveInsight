@@ -208,7 +208,10 @@ export default class EditLeave extends React.Component {
                     <span className="text-warning">
                       Refer policy for Bereavement/Paternity/Maternity/comp off{" "}
                       {""}
-                      <a href="#" target="_blank">
+                      <a
+                        href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
+                        target="_blank"
+                      >
                         (link to be given for leave policy)
                       </a>
                     </span>

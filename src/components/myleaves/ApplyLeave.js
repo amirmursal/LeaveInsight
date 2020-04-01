@@ -247,14 +247,14 @@ export default class ApplyLeave extends React.Component {
                   ProjectID === "5973" ||
                   ProjectID === "5966" ? (
                     <span className="text-warning">
-                      Refer policy for Bereavement/Paternity/Maternity/comp off{" "}
-                      {""}
+                      Refer{" "}
                       <a
                         href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
                         target="_blank"
                       >
-                        (link to be given for leave policy)
-                      </a>
+                        policy{" "}
+                      </a>{" "}
+                      for Bereavement/Paternity/Maternity/comp off
                     </span>
                   ) : null}
                   <div className="submit-section">

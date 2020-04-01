@@ -242,10 +242,8 @@ export default class MyLeaves extends React.Component {
             <div className="row">
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>
-                    Carry Forwarded
-                    <h4> {user.LeavesCarriedForward} </h4>
-                  </h6>
+                  <h6>Carry Forwarded</h6>
+                  <h4> {user.LeavesCarriedForward} </h4>
                 </div>
               </div>
               <div className="col-md-2">

@@ -17,7 +17,7 @@ export default class ApplyLeave extends React.Component {
       StartDate: new Date(),
       error: false,
       message: null,
-      isDisabled: false
+      isDisabled: false,
     };
   }
 
@@ -25,9 +25,9 @@ export default class ApplyLeave extends React.Component {
    * Date change handler for react-datepicker
    * @param date
    */
-  handleDateChange = date => {
+  handleDateChange = (date) => {
     this.setState({
-      StartDate: date
+      StartDate: date,
     });
   };
 
@@ -35,9 +35,9 @@ export default class ApplyLeave extends React.Component {
    * common input change handler for input and select
    * @param event
    */
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
   /**
@@ -48,7 +48,7 @@ export default class ApplyLeave extends React.Component {
   applyLeave = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
-      isDisabled: true
+      isDisabled: true,
     });
     let data = {
       ID: -1,
@@ -60,7 +60,7 @@ export default class ApplyLeave extends React.Component {
       Description: this.state.Description,
       WorkHours: this.state.WorkHours,
       StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
-      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY")
+      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
     };
     axios
       .post(
@@ -71,11 +71,11 @@ export default class ApplyLeave extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
         this.setState({
           ProjectID: 1118,
@@ -83,14 +83,14 @@ export default class ApplyLeave extends React.Component {
           WorkHours: 8,
           isDisabled: false,
           StartDate: new Date(),
-          message: "Leave applied successfully"
+          message: "Leave applied successfully",
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.setState({
-      message: null
+      message: null,
     });
   };
 
@@ -114,11 +114,11 @@ export default class ApplyLeave extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         if (response.data.results[0].IsExist !== 1) {
           this.applyLeave(user, getUser);
         } else {
@@ -128,11 +128,11 @@ export default class ApplyLeave extends React.Component {
             WorkHours: 8,
             isDisabled: false,
             StartDate: new Date(),
-            message: "Leave already exist"
+            message: "Leave already exist",
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -144,10 +144,10 @@ export default class ApplyLeave extends React.Component {
       Description,
       WorkHours,
       message,
-      isDisabled
+      isDisabled,
     } = this.state;
 
-    const isWeekday = date => {
+    const isWeekday = (date) => {
       const day = date.getDay();
       return day !== 0 && day !== 6;
     };
@@ -157,7 +157,11 @@ export default class ApplyLeave extends React.Component {
 
     let styles = this.props.open ? { display: "block" } : { display: "none" };
 
+    const isSubmitDisabled =
+      !Description || isDisabled || Description.trim() === "";
+
     //const excludeDates = [new Date()];
+
     return (
       <UserConsumer>
         {({ user, getUser }) => (
@@ -233,33 +237,38 @@ export default class ApplyLeave extends React.Component {
                       className="form-control"
                       value={Description}
                       onChange={this.handleChange}
+                      maxLength="200"
                     ></textarea>
                   </div>
-                  {message && message !== "Leave applied successfully" ? (
-                    <span className="text-danger">{message}</span>
-                  ) : (
-                    <span className="text-success">{message}</span>
-                  )}
+                  <p>
+                    {message && message !== "Leave applied successfully" ? (
+                      <span className="text-danger">{message}</span>
+                    ) : (
+                      <span className="text-success">{message}</span>
+                    )}
+                  </p>
 
-                  {ProjectID === "4852" ||
-                  ProjectID === "310" ||
-                  ProjectID === "5967" ||
-                  ProjectID === "5973" ||
-                  ProjectID === "5966" ? (
-                    <span className="text-warning">
-                      Refer{" "}
-                      <a
-                        href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
-                        target="_blank"
-                      >
-                        policy{" "}
-                      </a>{" "}
-                      for Bereavement/Paternity/Maternity/comp off
-                    </span>
-                  ) : null}
+                  <p>
+                    {ProjectID === "4852" ||
+                    ProjectID === "310" ||
+                    ProjectID === "5967" ||
+                    ProjectID === "5973" ||
+                    ProjectID === "5966" ? (
+                      <span className="text-warning">
+                        Refer{" "}
+                        <a
+                          href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
+                          target="_blank"
+                        >
+                          policy{" "}
+                        </a>{" "}
+                        for Bereavement/Paternity/Maternity/Comp Off/Floater
+                      </span>
+                    ) : null}
+                  </p>
                   <div className="submit-section">
                     <button
-                      disabled={!Description || isDisabled}
+                      disabled={isSubmitDisabled}
                       className="btn btn-primary submit-btn"
                       onClick={() => this.leaveRequest(user, getUser)}
                     >

@@ -17,7 +17,7 @@ export default class EditLeave extends React.Component {
       StartDate: new Date(this.props.leave.StartDate),
       error: false,
       message: null,
-      isDisabled: false
+      isDisabled: false,
     };
   }
 
@@ -25,9 +25,9 @@ export default class EditLeave extends React.Component {
    * Date change handler for react-datepicker
    * @param date
    */
-  handleDateChange = date => {
+  handleDateChange = (date) => {
     this.setState({
-      StartDate: date
+      StartDate: date,
     });
   };
 
@@ -35,9 +35,9 @@ export default class EditLeave extends React.Component {
    * common input change handler for input and select
    * @param event
    */
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -49,7 +49,7 @@ export default class EditLeave extends React.Component {
   leaveRequest = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
-      isDisabled: true
+      isDisabled: true,
     });
     let data = {
       ID: parseInt(this.props.leave.ID),
@@ -61,7 +61,7 @@ export default class EditLeave extends React.Component {
       Description: this.state.Description,
       WorkHours: this.state.WorkHours,
       StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
-      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY")
+      EndDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
     };
     axios
       .post(
@@ -72,11 +72,11 @@ export default class EditLeave extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
         //this.props.toggleEditLeaveDialog(); // to close edit dialog if furture require.
         this.setState({
@@ -85,14 +85,14 @@ export default class EditLeave extends React.Component {
           WorkHours: 8,
           isDisabled: false,
           StartDate: new Date(),
-          message: "Leave Edited successfully"
+          message: "Leave Edited successfully",
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
     this.setState({
-      message: null
+      message: null,
     });
   };
 
@@ -103,10 +103,10 @@ export default class EditLeave extends React.Component {
       Description,
       WorkHours,
       message,
-      isDisabled
+      isDisabled,
     } = this.state;
 
-    const isWeekday = date => {
+    const isWeekday = (date) => {
       const day = date.getDay();
       return day !== 0 && day !== 6;
     };
@@ -115,6 +115,9 @@ export default class EditLeave extends React.Component {
       : "modal custom-modal fade";
 
     let styles = this.props.open ? { display: "block" } : { display: "none" };
+
+    const isSubmitDisabled =
+      !Description || isDisabled || Description.trim() === "";
 
     //const excludeDates = [new Date()];
     return (
@@ -192,34 +195,37 @@ export default class EditLeave extends React.Component {
                       className="form-control"
                       value={Description}
                       onChange={this.handleChange}
+                      maxLength="200"
                     ></textarea>
                   </div>
-                  {message && message !== "Leave Edited successfully" ? (
-                    <span className="text-danger">{message}</span>
-                  ) : (
-                    <span className="text-success">{message}</span>
-                  )}
-
-                  {ProjectID === "4852" ||
-                  ProjectID === "310" ||
-                  ProjectID === "5967" ||
-                  ProjectID === "5973" ||
-                  ProjectID === "5966" ? (
-                    <span className="text-warning">
-                      Refer policy for Bereavement/Paternity/Maternity/comp off{" "}
-                      {""}
-                      <a
-                        href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
-                        target="_blank"
-                      >
-                        (link to be given for leave policy)
-                      </a>
-                    </span>
-                  ) : null}
-
+                  <p>
+                    {message && message !== "Leave Edited successfully" ? (
+                      <span className="text-danger">{message}</span>
+                    ) : (
+                      <span className="text-success">{message}</span>
+                    )}
+                  </p>
+                  <p>
+                    {ProjectID === "4852" ||
+                    ProjectID === "310" ||
+                    ProjectID === "5967" ||
+                    ProjectID === "5973" ||
+                    ProjectID === "5966" ? (
+                      <span className="text-warning">
+                        Refer{" "}
+                        <a
+                          href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
+                          target="_blank"
+                        >
+                          policy{" "}
+                        </a>{" "}
+                        for Bereavement/Paternity/Maternity/Comp Off/Floater
+                      </span>
+                    ) : null}
+                  </p>
                   <div className="submit-section">
                     <button
-                      disabled={!Description || isDisabled}
+                      disabled={isSubmitDisabled}
                       className="btn btn-primary submit-btn"
                       onClick={() => this.leaveRequest(user, getUser)}
                     >

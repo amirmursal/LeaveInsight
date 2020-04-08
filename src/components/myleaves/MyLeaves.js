@@ -16,7 +16,7 @@ export default class MyLeaves extends React.Component {
       isEditOpen: false,
       isDeleteOpen: false,
       leave: {},
-      leaveid: null
+      leaveid: null,
     };
   }
 
@@ -30,7 +30,7 @@ export default class MyLeaves extends React.Component {
     let data = {
       ID: parseInt(leave),
       EntityName: "Employee Work Schedules",
-      Status: "Cancelled"
+      Status: "Cancelled",
     };
     axios
       .post(
@@ -41,14 +41,14 @@ export default class MyLeaves extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -71,14 +71,14 @@ export default class MyLeaves extends React.Component {
         data,
         {
           headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId
-          }
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -93,7 +93,7 @@ export default class MyLeaves extends React.Component {
     let data = {
       ID: parseInt(leave),
       EntityName: "Employee Work Schedules",
-      Status: "Availed"
+      Status: "Availed",
     };
     axios
       .post(
@@ -104,14 +104,14 @@ export default class MyLeaves extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -131,51 +131,52 @@ export default class MyLeaves extends React.Component {
           <td>{element.ClientDescription}</td>
           <td>{element.Status}</td>
           <td className="text-right">
-            {element.Status !== "Rejected" && (
-              <div className="dropdown dropdown-action">
-                <a
-                  href="#"
-                  className="action-icon dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i className="material-icons">more_vert</i>
-                </a>
+            {element.Status !== "Rejected" &&
+              element.Status !== "Cancelled" &&
+              element.Status !== "Availed" && (
+                <div className="dropdown dropdown-action">
+                  <a
+                    href="#"
+                    className="action-icon dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i className="material-icons">more_vert</i>
+                  </a>
 
-                {element.Status === "Cancelled" ||
-                element.Status === "Applied" ? (
-                  <div className="dropdown-menu dropdown-menu-right">
-                    <button
-                      className="dropdown-item"
-                      onClick={() => this.toggleEditLeaveDialog(element)}
-                    >
-                      <i className="fa fa-pencil m-r-5"></i> Edit
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      onClick={() => this.toggleDeleteLeaveDialog(element.ID)}
-                    >
-                      <i className="fa fa-trash-o m-r-5"></i> Delete
-                    </button>
-                  </div>
-                ) : (
-                  <div className="dropdown-menu dropdown-menu-right">
-                    <button
-                      className="dropdown-item"
-                      onClick={() => this.availLeave(element.ID, getUser)}
-                    >
-                      <i className="fa fa-check m-r-5"></i> Avail
-                    </button>
-                    <button
-                      className="dropdown-item"
-                      onClick={() => this.cancelLeave(element.ID, getUser)}
-                    >
-                      <i className="fa fa-trash-o m-r-5"></i> Cancel
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                  {element.Status === "Applied" ? (
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <button
+                        className="dropdown-item"
+                        onClick={() => this.toggleEditLeaveDialog(element)}
+                      >
+                        <i className="fa fa-pencil m-r-5"></i> Edit
+                      </button>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => this.toggleDeleteLeaveDialog(element.ID)}
+                      >
+                        <i className="fa fa-trash-o m-r-5"></i> Delete
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="dropdown-menu dropdown-menu-right">
+                      <button
+                        className="dropdown-item"
+                        onClick={() => this.availLeave(element.ID, getUser)}
+                      >
+                        <i className="fa fa-check m-r-5"></i> Avail
+                      </button>
+                      <button
+                        className="dropdown-item"
+                        onClick={() => this.cancelLeave(element.ID, getUser)}
+                      >
+                        <i className="fa fa-trash-o m-r-5"></i> Cancel
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
           </td>
         </tr>
       );
@@ -187,27 +188,27 @@ export default class MyLeaves extends React.Component {
    */
   toggleApplyLeaveDialog = () => {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   };
 
   /**
    * function takes care for toggle edit leave dialog
    */
-  toggleEditLeaveDialog = leave => {
+  toggleEditLeaveDialog = (leave) => {
     this.setState({
       isEditOpen: !this.state.isEditOpen,
-      leave: leave
+      leave: leave,
     });
   };
 
   /**
    * function takes care for toggle delete leave dialog
    */
-  toggleDeleteLeaveDialog = leaveid => {
+  toggleDeleteLeaveDialog = (leaveid) => {
     this.setState({
       isDeleteOpen: !this.state.isDeleteOpen,
-      leaveid: leaveid
+      leaveid: leaveid,
     });
   };
 

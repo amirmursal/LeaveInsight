@@ -117,7 +117,10 @@ export default class EditLeave extends React.Component {
     let styles = this.props.open ? { display: "block" } : { display: "none" };
 
     const isSubmitDisabled =
-      !Description || isDisabled || Description.trim() === "";
+      !Description ||
+      isDisabled ||
+      Description.trim() === "" ||
+      Description.trim().length < 10;
 
     //const excludeDates = [new Date()];
     return (

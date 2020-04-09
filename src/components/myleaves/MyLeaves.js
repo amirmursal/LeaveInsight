@@ -241,7 +241,14 @@ export default class MyLeaves extends React.Component {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-2">
+              <div className="col-md-4">
+                <div className="dataTables_length">
+                  <label>PTO Details</label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
                 <div className="stats-info">
                   <h6>Carry Forwarded</h6>
                   <h4> {user.LeavesCarriedForward} </h4>
@@ -249,19 +256,13 @@ export default class MyLeaves extends React.Component {
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Accrual</h6>
+                  <h6>PTO Accrual</h6>
                   <h4>{user.LeaveAccrual} </h4>
                 </div>
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Applied</h6>
-                  <h4>{user.AppliedLeaveCount}</h4>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>Taken</h6>
+                  <h6>PTO Taken</h6>
                   <h4>{user.LeaveTaken}</h4>
                 </div>
               </div>
@@ -274,7 +275,7 @@ export default class MyLeaves extends React.Component {
               </div>
               <div className="col-md-2">
                 <div className="stats-info">
-                  <h6>Balance</h6>
+                  <h6>PTO Balance</h6>
                   <h4>{user.CurrentBalance}</h4>
                 </div>
               </div>
@@ -286,12 +287,11 @@ export default class MyLeaves extends React.Component {
                   <label>
                     {Array.isArray(user.AppliedLeaves) &&
                     user.AppliedLeaves.length
-                      ? "All Leaves"
-                      : "No leaves applied yet"}{" "}
+                      ? "All leaves"
+                      : "No leaves applied yet"}
                   </label>
                 </div>
               </div>
-              <div className="col-sm-12 col-md-6"></div>
             </div>
 
             <div className="row">

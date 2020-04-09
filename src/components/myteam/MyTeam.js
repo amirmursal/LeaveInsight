@@ -1,33 +1,53 @@
 import React from "react";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+import Loader from "../common/Loader";
 import { UserConsumer } from "../provider/UserProvider";
 
 export default class MyTeam extends React.Component {
-  /**
-   * function takes care for rendering my team data
-   * @param MyTeam array
-   * @param getUser
-   */
-  renderMyTeam = (myTeam, getUser) => {
-    return myTeam.map((element, i) => {
-      return (
-        <tr key={i}>
-          <td>
-            {element.FirstName} {element.LastName}
-          </td>
-          <td>{element.CompOff}</td>
-          <td>{element.LeaveBalance}</td>
-          <td>{element.LeaveTaken}</td>
-          <td>{element.PTOPlanned}</td>
-          <td>{element.FloaterHoliday}</td>
-        </tr>
-      );
-    });
-  };
-
   render() {
+    const columns = [
+      {
+        Header: "First Name",
+        accessor: "FirstName",
+        filterMethod: (filter, row) =>
+          row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
+          row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
+      },
+      {
+        Header: "CO Taken",
+        accessor: "CompOff",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "PTO Balance",
+        accessor: "LeaveBalance",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "PTO Taken",
+        accessor: "LeaveTaken",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "PTO Planned",
+        accessor: "PTOPlanned",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "Floater Holidays",
+        accessor: "FloaterHoliday",
+        className: "text-center",
+        filterable: false,
+      },
+    ];
     return (
       <UserConsumer>
-        {({ user, getUser }) => (
+        {({ user }) => (
           <div className="content container-fluid">
             <div className="page-header">
               <div className="row align-items-center">
@@ -46,28 +66,14 @@ export default class MyTeam extends React.Component {
             <div className="row">
               <div className="col-md-12">
                 <div className="table-responsive">
-                  {Array.isArray(user.MyTeam) && user.MyTeam.length ? (
-                    <div className="table-responsive">
-                      <table
-                        className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                        id="DataTables_Table_0"
-                        role="grid"
-                        aria-describedby="DataTables_Table_0_info"
-                      >
-                        <thead>
-                          <tr role="row">
-                            <th>Employee</th>
-                            <th>CO Taken</th>
-                            <th>PTO Balance</th>
-                            <th>PTO Taken</th>
-                            <th>PTO Planned</th>
-                            <th>Floater Holidays</th>
-                          </tr>
-                        </thead>
-                        <tbody>{this.renderMyTeam(user.MyTeam, getUser)}</tbody>
-                      </table>
-                    </div>
-                  ) : null}
+                  <ReactTable
+                    defaultPageSize={5}
+                    className="-striped -highlight"
+                    data={user.MyTeam}
+                    columns={columns}
+                    showPagination={true}
+                    filterable={true}
+                  />
                 </div>
               </div>
             </div>

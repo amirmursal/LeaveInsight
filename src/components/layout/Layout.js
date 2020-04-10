@@ -4,7 +4,7 @@ import Login from "../login/Login";
 import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
 import Profile from "../profile/Profile";
-import MyLeaves from "../myleaves/MyLeaves";
+import MyLeaves from "../leaves/MyLeaves";
 import MyTeam from "../myteam/MyTeam";
 import ReporteeLeaves from "../reporteeLeaves/ReporteeLeaves";
 

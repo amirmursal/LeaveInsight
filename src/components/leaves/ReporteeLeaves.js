@@ -2,11 +2,19 @@ import React from "react";
 import axios from "axios";
 import moment from "moment";
 import Loader from "../common/Loader";
+import RejectLeave from "./RejectLeave";
 import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
 
 export default class ReporteeLeaves extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRejectOpen: false,
+      leave: null,
+    };
+  }
   /**
    * function takes care for approve leave request
    * @param user
@@ -17,7 +25,7 @@ export default class ReporteeLeaves extends React.Component {
     let data = {
       ID: parseInt(leave),
       EntityName: "Employee Work Schedules",
-      Status: "Approved"
+      Status: "Approved",
     };
     axios
       .post(
@@ -28,47 +36,14 @@ export default class ReporteeLeaves extends React.Component {
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
+            "Content-Type": "application/json",
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
       })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  /**
-   * function takes care for cancel leave request
-   * @param user
-   * @param getUser
-   */
-  cancellLeaveRequest = (leave, getUser) => {
-    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    let data = {
-      ID: parseInt(leave),
-      EntityName: "Employee Work Schedules",
-      Status: "Rejected"
-    };
-    axios
-      .post(
-        " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
-        data,
-        {
-          headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId,
-            "Content-Type": "application/json"
-          }
-        }
-      )
-      .then(response => {
-        getUser();
-      })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -113,7 +88,7 @@ export default class ReporteeLeaves extends React.Component {
                 </button>
                 <button
                   className="dropdown-item"
-                  onClick={() => this.cancellLeaveRequest(element.ID, getUser)}
+                  onClick={() => this.toggleRejectLeaveDialog(element.ID)}
                 >
                   <i className="fa fa-ban m-r-5"></i> Reject
                 </button>
@@ -125,7 +100,18 @@ export default class ReporteeLeaves extends React.Component {
     });
   };
 
+  /**
+   * function takes care for toggle reject leave dialog
+   */
+  toggleRejectLeaveDialog = (leave) => {
+    this.setState({
+      isRejectOpen: !this.state.isRejectOpen,
+      leave: leave,
+    });
+  };
+
   render() {
+    const { isRejectOpen, leave } = this.state;
     return (
       <UserConsumer>
         {({ user, getUser }) => (
@@ -229,6 +215,17 @@ export default class ReporteeLeaves extends React.Component {
                 )}
               </div>
             </div>
+
+            {isRejectOpen && (
+              <React.Fragment>
+                <RejectLeave
+                  leave={leave}
+                  open={isRejectOpen}
+                  toggleRejectLeaveDialog={() => this.toggleRejectLeaveDialog()}
+                />
+                <div className="modal-backdrop fade show"></div>
+              </React.Fragment>
+            )}
           </div>
         )}
       </UserConsumer>

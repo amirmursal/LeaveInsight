@@ -6,7 +6,7 @@ import Sidebar from "../sidebar/Sidebar";
 import Profile from "../profile/Profile";
 import MyLeaves from "../leaves/MyLeaves";
 import MyTeam from "../myteam/MyTeam";
-import ReporteeLeaves from "../reporteeLeaves/ReporteeLeaves";
+import ReporteeLeaves from "../leaves/ReporteeLeaves";
 
 export default class Layout extends React.Component {
   render() {

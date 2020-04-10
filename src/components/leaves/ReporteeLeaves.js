@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
+import Loader from "../common/Loader";
 import RejectLeave from "./RejectLeave";
-import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
@@ -205,7 +205,9 @@ export default class ReporteeLeaves extends React.Component {
                 showPagination={true}
                 filterable={true}
               />
-            ) : null}
+            ) : (
+              !Array.isArray(user.ReporteeAppliedLeaves) && <Loader />
+            )}
           </div>
         </div>
 

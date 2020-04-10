@@ -31,6 +31,7 @@ export default class Layout extends React.Component {
       .then((response) => {})
       .catch((error) => {
         console.log(error);
+        localStorage.removeItem("TokenId");
         this.props.history.push("/login");
       });
   };

@@ -1,5 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "../../config";
 import Login from "../login/Login";
 import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
@@ -9,6 +11,30 @@ import MyTeam from "../myteam/MyTeam";
 import ReporteeLeaves from "../leaves/ReporteeLeaves";
 
 export default class Layout extends React.Component {
+  componentDidMount() {
+    this.isTokenValid();
+  }
+
+  isTokenValid = () => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    axios
+      .get(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/UserInformation/",
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+          },
+        }
+      )
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+        this.props.history.push("/login");
+      });
+  };
+
   render() {
     const isLoggedIn = JSON.parse(localStorage.getItem("TokenId"));
     return isLoggedIn ? (

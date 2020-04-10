@@ -9,6 +9,7 @@ import Profile from "../profile/Profile";
 import MyLeaves from "../leaves/MyLeaves";
 import MyTeam from "../myteam/MyTeam";
 import ReporteeLeaves from "../leaves/ReporteeLeaves";
+import { UserConsumer } from "../provider/UserProvider";
 
 export default class Layout extends React.Component {
   componentDidMount() {
@@ -42,14 +43,23 @@ export default class Layout extends React.Component {
       <div>
         <Header history={this.props.history} />
         <Sidebar />
-        <div className="page-wrapper">
-          <Route path="/" exact component={MyLeaves} />
-          <Route path="/reporteeleaves" component={ReporteeLeaves} />
-          <Route path="/myleaves" component={MyLeaves} />
-          <Route path="/myteam" component={MyTeam} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/logout" component={Login} />
-        </div>
+        <UserConsumer>
+          {({ user, getUser }) => (
+            <div className="page-wrapper">
+              <Route path="/" exact component={MyLeaves} />
+              <Route
+                path="/reporteeleaves"
+                component={() => (
+                  <ReporteeLeaves user={user} getUser={getUser} />
+                )}
+              />
+              <Route path="/myleaves" component={MyLeaves} />
+              <Route path="/myteam" component={MyTeam} />
+              <Route path="/profile" component={Profile} />
+              <Route path="/logout" component={Login} />
+            </div>
+          )}
+        </UserConsumer>
       </div>
     ) : (
       <Login history={this.props.history} />

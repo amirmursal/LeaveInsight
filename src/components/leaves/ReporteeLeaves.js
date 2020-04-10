@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
-import Loader from "../common/Loader";
 import RejectLeave from "./RejectLeave";
 import Avatar from "../../assests/images/avatar.png";
 import { serverUrl } from "../../config";
-import { UserConsumer } from "../provider/UserProvider";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
 export default class ReporteeLeaves extends React.Component {
   constructor(props) {
@@ -49,58 +49,6 @@ export default class ReporteeLeaves extends React.Component {
   };
 
   /**
-   * function takes care for rendering reportee applied leaves data
-   * @param ReporteeAppliedLeaves array
-   * @param getUser
-   */
-  reporteeAppliedLeaves = (ReporteeAppliedLeaves, getUser) => {
-    return ReporteeAppliedLeaves.map((element, i) => {
-      return (
-        <tr key={i}>
-          <td>
-            <h2 className="table-avatar">
-              <a href="" className="avatar">
-                <img alt="" src={Avatar} />
-              </a>
-              {element.Employee}
-            </h2>
-          </td>
-          <td>Planned PTO</td>
-          <td>{moment(element.StartDate).format("MM/DD/YYYY")}</td>
-          <td>{element.ClientDescription}</td>
-          <td>{element.Status}</td>
-          <td className="text-right">
-            <div className="dropdown dropdown-action">
-              <a
-                href=""
-                className="action-icon dropdown-toggle"
-                data-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="material-icons">more_vert</i>
-              </a>
-              <div className="dropdown-menu dropdown-menu-right">
-                <button
-                  className="dropdown-item"
-                  onClick={() => this.approveLeaveRequest(element.ID, getUser)}
-                >
-                  <i className="fa fa-check m-r-5"></i> Approve
-                </button>
-                <button
-                  className="dropdown-item"
-                  onClick={() => this.toggleRejectLeaveDialog(element.ID)}
-                >
-                  <i className="fa fa-ban m-r-5"></i> Reject
-                </button>
-              </div>
-            </div>
-          </td>
-        </tr>
-      );
-    });
-  };
-
-  /**
    * function takes care for toggle reject leave dialog
    */
   toggleRejectLeaveDialog = (leave) => {
@@ -112,123 +60,166 @@ export default class ReporteeLeaves extends React.Component {
 
   render() {
     const { isRejectOpen, leave } = this.state;
+    const { user, getUser } = this.props;
+    const columns = [
+      {
+        Header: "Employee",
+        accessor: "Employee",
+        className: "text-center",
+        filterMethod: (filter, row) =>
+          row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
+          row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
+      },
+      {
+        Header: "Project",
+        accessor: "Project",
+        className: "text-center",
+        filterMethod: (filter, row) =>
+          row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
+          row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
+      },
+      {
+        Header: "Start Date",
+        accessor: "StartDate",
+        className: "text-center",
+        filterable: false,
+        Cell: (props) => (
+          <React.Fragment>
+            {moment(props.value).format("DD/MM/YYYY")}
+          </React.Fragment>
+        ),
+      },
+      {
+        Header: "Description",
+        accessor: "ClientDescription",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "Status",
+        accessor: "Status",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "Actions",
+        accessor: "Status",
+        sortable: false,
+        filterable: false,
+        className: "text-center",
+        Cell: (props) => (
+          <React.Fragment>
+            <div>
+              <button
+                className="btn btn-primary btn-sm m-r-5"
+                onClick={() =>
+                  this.approveLeaveRequest(props.original.ID, getUser)
+                }
+              >
+                <i className="fa fa-pencil m-r-5"></i> Approve
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => this.toggleRejectLeaveDialog(props.original.ID)}
+              >
+                <i className="fa fa-trash-o m-r-5"></i> Reject
+              </button>
+            </div>
+          </React.Fragment>
+        ),
+      },
+    ];
+
     return (
-      <UserConsumer>
-        {({ user, getUser }) => (
-          <div className="content container-fluid">
-            <div className="page-header">
-              <div className="row align-items-center">
-                <div className="col">
-                  <h3 className="page-title">Leaves</h3>
-                  <ul className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="">Employee</a>
-                    </li>
-                    <li className="breadcrumb-item active">Awaiting Actions</li>
-                  </ul>
-                </div>
-              </div>
+      <div className="content container-fluid">
+        <div className="page-header">
+          <div className="row align-items-center">
+            <div className="col">
+              <h3 className="page-title">Leaves</h3>
+              <ul className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <a href="">Employee</a>
+                </li>
+                <li className="breadcrumb-item active">Awaiting Actions</li>
+              </ul>
             </div>
-
-            <div className="row">
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Planned Leaves</h6>
-                  <h4>
-                    {user.ReporteeLeaves !== undefined
-                      ? user.ReporteeLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Todays Absents</h6>
-                  <h4>
-                    {user.TodaysLeaves !== undefined
-                      ? user.TodaysLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-
-              <div className="col-md-4">
-                <div className="stats-info">
-                  <h6>Pending Requests</h6>
-                  <h4>
-                    {user.ReporteeAppliedLeaves !== undefined
-                      ? user.ReporteeAppliedLeaves.length
-                      : 0}
-                  </h4>
-                </div>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-sm-12 col-md-6">
-                <div className="dataTables_length">
-                  <label>
-                    {Array.isArray(user.ReporteeAppliedLeaves) &&
-                    user.ReporteeAppliedLeaves.length
-                      ? "Pending Leaves"
-                      : "No Pending leave request"}{" "}
-                  </label>
-                </div>
-              </div>
-              <div className="col-sm-12 col-md-6"></div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-12">
-                {Array.isArray(user.ReporteeAppliedLeaves) &&
-                user.ReporteeAppliedLeaves.length ? (
-                  <div className="table-responsive">
-                    <table
-                      className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                      id="DataTables_Table_0"
-                      role="grid"
-                      aria-describedby="DataTables_Table_0_info"
-                    >
-                      <thead>
-                        <tr role="row">
-                          <th>Employee</th>
-                          <th>Leave Type</th>
-                          <th>Start Date</th>
-                          <th>Reason</th>
-                          <th>Status</th>
-                          <th className="text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.reporteeAppliedLeaves(
-                          user.ReporteeAppliedLeaves.sort(
-                            (a, b) => b.ID - a.ID
-                          ),
-                          getUser
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  !Array.isArray(user.AppliedLeaves) && <Loader />
-                )}
-              </div>
-            </div>
-
-            {isRejectOpen && (
-              <React.Fragment>
-                <RejectLeave
-                  leave={leave}
-                  open={isRejectOpen}
-                  toggleRejectLeaveDialog={() => this.toggleRejectLeaveDialog()}
-                />
-                <div className="modal-backdrop fade show"></div>
-              </React.Fragment>
-            )}
           </div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-4">
+            <div className="stats-info">
+              <h6>Planned Leaves</h6>
+              <h4>
+                {user.ReporteeLeaves !== undefined
+                  ? user.ReporteeLeaves.length
+                  : 0}
+              </h4>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="stats-info">
+              <h6>Todays Absents</h6>
+              <h4>
+                {user.TodaysLeaves !== undefined ? user.TodaysLeaves.length : 0}
+              </h4>
+            </div>
+          </div>
+
+          <div className="col-md-4">
+            <div className="stats-info">
+              <h6>Pending Requests</h6>
+              <h4>
+                {user.ReporteeAppliedLeaves !== undefined
+                  ? user.ReporteeAppliedLeaves.length
+                  : 0}
+              </h4>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-6">
+            <div className="dataTables_length">
+              <label>
+                {Array.isArray(user.ReporteeAppliedLeaves) &&
+                user.ReporteeAppliedLeaves.length
+                  ? "Pending Leaves"
+                  : "No Pending leave request"}{" "}
+              </label>
+            </div>
+          </div>
+          <div className="col-sm-12 col-md-6"></div>
+        </div>
+
+        <div className="row">
+          <div className="col-md-12">
+            {Array.isArray(user.ReporteeAppliedLeaves) &&
+            user.ReporteeAppliedLeaves.length ? (
+              <ReactTable
+                defaultPageSize={5}
+                className="-striped -highlight"
+                data={user.ReporteeAppliedLeaves}
+                columns={columns}
+                showPagination={true}
+                filterable={true}
+              />
+            ) : null}
+          </div>
+        </div>
+
+        {isRejectOpen && (
+          <React.Fragment>
+            <RejectLeave
+              leave={leave}
+              open={isRejectOpen}
+              toggleRejectLeaveDialog={() => this.toggleRejectLeaveDialog()}
+            />
+            <div className="modal-backdrop fade show"></div>
+          </React.Fragment>
         )}
-      </UserConsumer>
+      </div>
     );
   }
 }

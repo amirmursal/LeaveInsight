@@ -8,8 +8,9 @@ export default class MyTeam extends React.Component {
   render() {
     const columns = [
       {
-        Header: "First Name",
-        accessor: "FirstName",
+        Header: "Employee",
+        id: "Employee",
+        accessor: (d) => d.FirstName + " " + d.LastName,
         filterMethod: (filter, row) =>
           row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
           row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),

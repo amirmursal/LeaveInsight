@@ -97,6 +97,7 @@ export default class ReporteeLeaves extends React.Component {
         Header: "Status",
         accessor: "Status",
         className: "text-center",
+        sortable: false,
         filterable: false,
       },
       {

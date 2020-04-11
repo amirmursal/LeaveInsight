@@ -266,7 +266,8 @@ export default class MyLeaves extends React.Component {
       },
       {
         Header: "Actions",
-        accessor: "Status",
+        id: "Actions",
+        accessor: (d) => d.Status,
         sortable: false,
         filterable: false,
         className: "text-center",

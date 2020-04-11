@@ -228,7 +228,6 @@ export default class MyLeaves extends React.Component {
       {
         Header: "Leave Type",
         accessor: "Project",
-        className: "text-center",
         filterable: true,
         filterMethod: (filter, row) =>
           row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
@@ -254,7 +253,6 @@ export default class MyLeaves extends React.Component {
       {
         Header: "Reason",
         accessor: "ClientDescription",
-        className: "text-center",
         filterable: false,
       },
       {

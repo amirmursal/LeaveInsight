@@ -65,7 +65,6 @@ export default class ReporteeLeaves extends React.Component {
       {
         Header: "Employee",
         accessor: "Employee",
-        className: "text-center",
         filterMethod: (filter, row) =>
           row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
           row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
@@ -92,7 +91,6 @@ export default class ReporteeLeaves extends React.Component {
       {
         Header: "Description",
         accessor: "ClientDescription",
-        className: "text-center",
         filterable: false,
       },
       {

@@ -77,8 +77,9 @@ export default class EditLeave extends React.Component {
         }
       )
       .then((response) => {
-        getUser();
-        //this.props.toggleEditLeaveDialog(); // to close edit dialog if furture require.
+        //getUser();
+        // this function commented becuase it is updateing whole react table along
+        // with parent component which leads to closing existing dialog
         this.setState({
           ProjectID: 1118,
           Description: "",
@@ -94,6 +95,11 @@ export default class EditLeave extends React.Component {
     this.setState({
       message: null,
     });
+  };
+
+  closeEditDialog = (getUser) => {
+    this.props.toggleEditLeaveDialog();
+    getUser();
   };
 
   render() {
@@ -134,7 +140,7 @@ export default class EditLeave extends React.Component {
                   <button
                     type="button"
                     className="close"
-                    onClick={() => this.props.toggleEditLeaveDialog()}
+                    onClick={() => this.closeEditDialog(getUser)}
                     aria-label="Close"
                   >
                     <span aria-hidden="true">&times;</span>

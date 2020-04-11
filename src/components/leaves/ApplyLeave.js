@@ -76,7 +76,9 @@ export default class ApplyLeave extends React.Component {
         }
       )
       .then((response) => {
-        getUser();
+        //getUser();
+        // this function commented becuase it is updateing whole react table along
+        // with parent component which leads to closing existing dialog
         this.setState({
           ProjectID: 1118,
           Description: "",
@@ -92,6 +94,11 @@ export default class ApplyLeave extends React.Component {
     this.setState({
       message: null,
     });
+  };
+
+  closeApplyDialog = (getUser) => {
+    this.props.toggleApplyLeaveDialog();
+    getUser();
   };
 
   /**
@@ -176,7 +183,7 @@ export default class ApplyLeave extends React.Component {
                   <button
                     type="button"
                     className="close"
-                    onClick={() => this.props.toggleApplyLeaveDialog()}
+                    onClick={() => this.closeApplyDialog(getUser)}
                     aria-label="Close"
                   >
                     <span aria-hidden="true">&times;</span>

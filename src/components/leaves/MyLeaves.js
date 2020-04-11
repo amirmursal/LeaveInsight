@@ -1,12 +1,13 @@
 import React from "react";
 import axios from "axios";
 import moment from "moment";
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 import Loader from "../common/Loader";
 import { serverUrl } from "../../config";
 import ApplyLeave from "./ApplyLeave";
 import EditLeave from "./EditLeave";
 import DeleteLeave from "./DeleteLeave";
-import { UserConsumer } from "../provider/UserProvider";
 
 export default class MyLeaves extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class MyLeaves extends React.Component {
       isDeleteOpen: false,
       leave: {},
       leaveid: null,
+      sortOptions: [{ id: "StartDate", desc: true }],
     };
   }
 
@@ -213,156 +215,246 @@ export default class MyLeaves extends React.Component {
   };
 
   render() {
-    const { isOpen, isEditOpen, leave, isDeleteOpen, leaveid } = this.state;
+    const {
+      isOpen,
+      isEditOpen,
+      leave,
+      isDeleteOpen,
+      leaveid,
+      sortOptions,
+    } = this.state;
+    const { user, getUser } = this.props;
+    const columns = [
+      {
+        Header: "Leave Type",
+        accessor: "Project",
+        className: "text-center",
+        filterable: true,
+        filterMethod: (filter, row) =>
+          row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
+          row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
+      },
+      {
+        Header: "Start Date",
+        accessor: "StartDate",
+        className: "text-center",
+        filterable: false,
+        Cell: (props) => (
+          <React.Fragment>
+            {moment(props.value).format("DD/MM/YYYY")}
+          </React.Fragment>
+        ),
+      },
+      {
+        Header: "Work Hours",
+        accessor: "Duration",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "Reason",
+        accessor: "ClientDescription",
+        className: "text-center",
+        filterable: false,
+      },
+      {
+        Header: "Status",
+        accessor: "Status",
+        className: "text-center",
+        filterable: true,
+        filterMethod: (filter, row) =>
+          row[filter.id].toUpperCase().startsWith(filter.value.toUpperCase()) ||
+          row[filter.id].toUpperCase().endsWith(filter.value.toUpperCase()),
+      },
+      {
+        Header: "Actions",
+        accessor: "Status",
+        sortable: false,
+        filterable: false,
+        className: "text-center",
+        Cell: (props) => {
+          return (
+            <React.Fragment>
+              {props.value !== "Rejected" &&
+                props.value !== "Cancelled" &&
+                props.value !== "Availed" && (
+                  <div>
+                    {props.value === "Applied" ? (
+                      <div>
+                        <button
+                          className="btn btn-primary btn-sm m-r-5"
+                          onClick={() =>
+                            this.toggleEditLeaveDialog(props.original)
+                          }
+                        >
+                          <i className="fa fa-pencil m-r-5"></i> Edit
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() =>
+                            this.toggleDeleteLeaveDialog(props.original.ID)
+                          }
+                        >
+                          <i className="fa fa-trash-o m-r-5"></i> Delete
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <button
+                          className="btn btn-success btn-sm m-r-5"
+                          onClick={() =>
+                            this.availLeave(props.original.ID, getUser)
+                          }
+                        >
+                          <i className="fa fa-check m-r-5"></i> Avail
+                        </button>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          onClick={() =>
+                            this.cancelLeave(props.original.ID, getUser)
+                          }
+                        >
+                          <i className="fa fa-times m-r-5"></i> Cancel
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+            </React.Fragment>
+          );
+        },
+      },
+    ];
 
     return (
-      <UserConsumer>
-        {({ user, getUser }) => (
-          <div className="content container-fluid">
-            <div className="page-header">
-              <div className="row align-items-center">
-                <div className="col">
-                  <h3 className="page-title">Welcome {user.FirstName}!</h3>
-                  <ul className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <a href="">Employee</a>
-                    </li>
-                    <li className="breadcrumb-item active">My Leaves</li>
-                  </ul>
-                </div>
-                <div className="col-auto float-right ml-auto">
-                  <button
-                    className="btn add-btn"
-                    onClick={() => this.toggleApplyLeaveDialog()}
-                  >
-                    <i className="fa fa-plus"></i> Apply Leave
-                  </button>
-                </div>
-              </div>
+      <div className="content container-fluid">
+        <div className="page-header">
+          <div className="row align-items-center">
+            <div className="col">
+              <h3 className="page-title">Welcome {user.FirstName}!</h3>
+              <ul className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <a href="">Employee</a>
+                </li>
+                <li className="breadcrumb-item active">My Leaves</li>
+              </ul>
             </div>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="dataTables_length">
-                  <label>PTO Details</label>
-                </div>
-              </div>
+            <div className="col-auto float-right ml-auto">
+              <button
+                className="btn add-btn"
+                onClick={() => this.toggleApplyLeaveDialog()}
+              >
+                <i className="fa fa-plus"></i> Apply Leave
+              </button>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <div className="stats-info">
-                  <h6>Carry Forwarded</h6>
-                  <h4> {user.LeavesCarriedForward} </h4>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>PTO Accrual</h6>
-                  <h4>{user.LeaveAccrual} </h4>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>PTO Taken</h6>
-                  <h4>{user.LeaveTaken}</h4>
-                </div>
-              </div>
-
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>LWP</h6>
-                  <h4>{user.LOP}</h4>
-                </div>
-              </div>
-              <div className="col-md-2">
-                <div className="stats-info">
-                  <h6>PTO Balance</h6>
-                  <h4>{user.CurrentBalance}</h4>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="dataTables_length">
+              <label>PTO Details</label>
             </div>
-
-            <div className="row">
-              <div className="col-sm-12 col-md-6">
-                <div className="dataTables_length">
-                  <label>
-                    {Array.isArray(user.AppliedLeaves) &&
-                    user.AppliedLeaves.length
-                      ? "All leaves"
-                      : "No leaves applied yet"}
-                  </label>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-3">
+            <div className="stats-info">
+              <h6>Carry Forwarded</h6>
+              <h4> {user.LeavesCarriedForward} </h4>
             </div>
-
-            <div className="row">
-              <div className="col-md-12">
-                {Array.isArray(user.AppliedLeaves) &&
-                user.AppliedLeaves.length ? (
-                  <div className="table-responsive">
-                    <table
-                      className="table table-striped custom-table mb-0 datatable dataTable no-footer"
-                      id="DataTables_Table_0"
-                      role="grid"
-                      aria-describedby="DataTables_Table_0_info"
-                    >
-                      <thead>
-                        <tr role="row">
-                          <th>Leave Type</th>
-                          <th>Start Date</th>
-                          <th>Work Hours</th>
-                          <th>Reason</th>
-                          <th>Status</th>
-                          <th className="text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.renderAppliedLeaves(
-                          user.AppliedLeaves.sort((a, b) => b.ID - a.ID),
-                          getUser
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  !Array.isArray(user.AppliedLeaves) && <Loader />
-                )}
-              </div>
+          </div>
+          <div className="col-md-2">
+            <div className="stats-info">
+              <h6>PTO Accrual</h6>
+              <h4>{user.LeaveAccrual} </h4>
             </div>
+          </div>
 
-            {isOpen && (
-              <React.Fragment>
-                <ApplyLeave
-                  open={isOpen}
-                  toggleApplyLeaveDialog={() => this.toggleApplyLeaveDialog()}
-                />
-                <div className="modal-backdrop fade show"></div>
-              </React.Fragment>
-            )}
+          <div className="col-md-2">
+            <div className="stats-info">
+              <h6>PTO Taken</h6>
+              <h4>{user.LeaveTaken}</h4>
+            </div>
+          </div>
 
-            {isEditOpen && (
-              <React.Fragment>
-                <EditLeave
-                  leave={leave}
-                  open={isEditOpen}
-                  toggleEditLeaveDialog={() => this.toggleEditLeaveDialog()}
-                />
-                <div className="modal-backdrop fade show"></div>
-              </React.Fragment>
-            )}
-
-            {isDeleteOpen && (
-              <React.Fragment>
-                <DeleteLeave
-                  leaveid={leaveid}
-                  open={isDeleteOpen}
-                  toggleDeleteLeaveDialog={() => this.toggleDeleteLeaveDialog()}
-                />
-                <div className="modal-backdrop fade show"></div>
-              </React.Fragment>
+          <div className="col-md-2">
+            <div className="stats-info">
+              <h6>LWP</h6>
+              <h4>{user.LOP}</h4>
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="stats-info">
+              <h6>PTO Balance</h6>
+              <h4>{user.CurrentBalance}</h4>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-sm-12 col-md-6">
+            <div className="dataTables_length">
+              <label>
+                {Array.isArray(user.AppliedLeaves) && user.AppliedLeaves.length
+                  ? "All Leaves"
+                  : "No leaves applied yet"}{" "}
+              </label>
+            </div>
+          </div>
+          <div className="col-sm-12 col-md-6"></div>
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            {Array.isArray(user.AppliedLeaves) && user.AppliedLeaves.length ? (
+              <ReactTable
+                sorted={sortOptions}
+                defaultPageSize={10}
+                className="-striped -highlight"
+                data={user.AppliedLeaves}
+                columns={columns}
+                showPagination={true}
+                filterable={true}
+                onSortedChange={(val) => {
+                  this.setState({ sortOptions: val });
+                }}
+              />
+            ) : (
+              !Array.isArray(user.AppliedLeaves) && <Loader />
             )}
           </div>
+        </div>
+
+        {isOpen && (
+          <React.Fragment>
+            <ApplyLeave
+              open={isOpen}
+              toggleApplyLeaveDialog={() => this.toggleApplyLeaveDialog()}
+            />
+            <div className="modal-backdrop fade show"></div>
+          </React.Fragment>
         )}
-      </UserConsumer>
+
+        {isEditOpen && (
+          <React.Fragment>
+            <EditLeave
+              leave={leave}
+              open={isEditOpen}
+              toggleEditLeaveDialog={() => this.toggleEditLeaveDialog()}
+            />
+            <div className="modal-backdrop fade show"></div>
+          </React.Fragment>
+        )}
+
+        {isDeleteOpen && (
+          <React.Fragment>
+            <DeleteLeave
+              leaveid={leaveid}
+              open={isDeleteOpen}
+              toggleDeleteLeaveDialog={() => this.toggleDeleteLeaveDialog()}
+            />
+            <div className="modal-backdrop fade show"></div>
+          </React.Fragment>
+        )}
+      </div>
     );
   }
 }

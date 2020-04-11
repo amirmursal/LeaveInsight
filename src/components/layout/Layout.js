@@ -46,14 +46,21 @@ export default class Layout extends React.Component {
         <UserConsumer>
           {({ user, getUser }) => (
             <div className="page-wrapper">
-              <Route path="/" exact component={MyLeaves} />
+              <Route
+                path="/"
+                exact
+                component={() => <MyLeaves user={user} getUser={getUser} />}
+              />
               <Route
                 path="/reporteeleaves"
                 component={() => (
                   <ReporteeLeaves user={user} getUser={getUser} />
                 )}
               />
-              <Route path="/myleaves" component={MyLeaves} />
+              <Route
+                path="/myleaves"
+                component={() => <MyLeaves user={user} getUser={getUser} />}
+              />
               <Route path="/myteam" component={MyTeam} />
               <Route path="/profile" component={Profile} />
               <Route path="/logout" component={Login} />

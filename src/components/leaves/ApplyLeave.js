@@ -36,9 +36,16 @@ export default class ApplyLeave extends React.Component {
    * @param event
    */
   handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+    if (event.target.name === "ProjectID") {
+      this.setState({
+        [event.target.name]: event.target.value,
+        message: null,
+      });
+    } else {
+      this.setState({
+        [event.target.name]: event.target.value,
+      });
+    }
   };
   /**
    * function takes care for applying leave request

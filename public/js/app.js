@@ -1,10 +1,4 @@
-/*
-Author       : Dreamguys
-Template Name: SmartHR - Bootstrap Admin Template
-Version      : 3.2
-*/
-
-$(document).ready(function() {
+$(document).ready(function () {
   // Variables declarations
 
   var $wrapper = $(".main-wrapper");
@@ -13,7 +7,7 @@ $(document).ready(function() {
 
   // Sidebar
 
-  var Sidemenu = function() {
+  var Sidemenu = function () {
     this.$menuItem = $("#sidebar-menu a");
   };
 
@@ -54,7 +48,7 @@ $(document).ready(function() {
   // Mobile menu sidebar overlay
 
   $("body").append('<div class="sidebar-overlay"></div>');
-  $(document).on("click", "#mobile_btn", function() {
+  $(document).on("click", "#mobile_btn", function () {
     $wrapper.toggleClass("slide-nav");
     $(".sidebar-overlay").toggleClass("opened");
     $("html").addClass("menu-opened");
@@ -62,7 +56,7 @@ $(document).ready(function() {
     return false;
   });
 
-  $(".sidebar-overlay").on("click", function() {
+  $(".sidebar-overlay").on("click", function () {
     $("html").removeClass("menu-opened");
     $(this).removeClass("opened");
     $wrapper.removeClass("slide-nav");
@@ -72,7 +66,7 @@ $(document).ready(function() {
 
   // Chat sidebar overlay
 
-  $(document).on("click", "#task_chat", function() {
+  $(document).on("click", "#task_chat", function () {
     $(".sidebar-overlay").toggleClass("opened");
     $("#task_window").addClass("opened");
     return false;
@@ -91,12 +85,12 @@ $(document).ready(function() {
 
   if ($(".modal").length > 0) {
     var modalUniqueClass = ".modal";
-    $(".modal").on("show.bs.modal", function(e) {
+    $(".modal").on("show.bs.modal", function (e) {
       var $element = $(this);
       var $uniques = $(modalUniqueClass + ":visible").not($(this));
       if ($uniques.length) {
         $uniques.modal("hide");
-        $uniques.one("hidden.bs.modal", function(e) {
+        $uniques.one("hidden.bs.modal", function (e) {
           $element.modal("show");
         });
         return false;
@@ -108,7 +102,7 @@ $(document).ready(function() {
 
   if ($(".floating").length > 0) {
     $(".floating")
-      .on("focus blur", function(e) {
+      .on("focus blur", function (e) {
         $(this)
           .parents(".form-focus")
           .toggleClass("focused", e.type === "focus" || this.value.length > 0);
@@ -126,12 +120,12 @@ $(document).ready(function() {
       size: "7px",
       color: "#ccc",
       wheelStep: 10,
-      touchScrollStep: 100
+      touchScrollStep: 100,
     });
     var wHeight = $(window).height() - 60;
     $slimScrolls.height(wHeight);
     $(".sidebar .slimScrollDiv").height(wHeight);
-    $(window).resize(function() {
+    $(window).resize(function () {
       var rHeight = $(window).height() - 60;
       $slimScrolls.height(rHeight);
       $(".sidebar .slimScrollDiv").height(rHeight);
@@ -142,7 +136,7 @@ $(document).ready(function() {
 
   var pHeight = $(window).height();
   $pageWrapper.css("min-height", pHeight);
-  $(window).resize(function() {
+  $(window).resize(function () {
     var prHeight = $(window).height();
     $pageWrapper.css("min-height", prHeight);
   });
@@ -178,32 +172,24 @@ $(document).ready(function() {
   // Email Inbox
 
   if ($(".clickable-row").length > 0) {
-    $(".clickable-row").click(function() {
+    $(".clickable-row").click(function () {
       window.location = $(this).data("href");
     });
   }
 
   // Check all email
 
-  $(document).on("click", "#check_all", function() {
+  $(document).on("click", "#check_all", function () {
     $(".checkmail").click();
     return false;
   });
   if ($(".checkmail").length > 0) {
-    $(".checkmail").each(function() {
-      $(this).on("click", function() {
-        if (
-          $(this)
-            .closest("tr")
-            .hasClass("checked")
-        ) {
-          $(this)
-            .closest("tr")
-            .removeClass("checked");
+    $(".checkmail").each(function () {
+      $(this).on("click", function () {
+        if ($(this).closest("tr").hasClass("checked")) {
+          $(this).closest("tr").removeClass("checked");
         } else {
-          $(this)
-            .closest("tr")
-            .addClass("checked");
+          $(this).closest("tr").addClass("checked");
         }
       });
     });
@@ -211,11 +197,8 @@ $(document).ready(function() {
 
   // Mail important
 
-  $(document).on("click", ".mail-important", function() {
-    $(this)
-      .find("i.fa")
-      .toggleClass("fa-star")
-      .toggleClass("fa-star-o");
+  $(document).on("click", ".mail-important", function () {
+    $(this).find("i.fa").toggleClass("fa-star").toggleClass("fa-star-o");
   });
 
   // Summernote
@@ -225,13 +208,13 @@ $(document).ready(function() {
       height: 200, // set editor height
       minHeight: null, // set minimum height of editor
       maxHeight: null, // set maximum height of editor
-      focus: false // set focus to editable area after initializing summernote
+      focus: false, // set focus to editable area after initializing summernote
     });
   }
 
   // Task Complete
 
-  $(document).on("click", "#task_complete", function() {
+  $(document).on("click", "#task_complete", function () {
     $(this).toggleClass("task-completed");
     return false;
   });
@@ -247,7 +230,7 @@ $(document).ready(function() {
 
   // Leave Settings button show
 
-  $(document).on("click", ".leave-edit-btn", function() {
+  $(document).on("click", ".leave-edit-btn", function () {
     $(this)
       .removeClass("leave-edit-btn")
       .addClass("btn btn-white leave-cancel-btn")
@@ -257,34 +240,21 @@ $(document).ready(function() {
       .append(
         '<button class="btn btn-primary leave-save-btn" type="submit">Save</button>'
       );
-    $(this)
-      .parent()
-      .parent()
-      .find("input")
-      .prop("disabled", false);
+    $(this).parent().parent().find("input").prop("disabled", false);
     return false;
   });
-  $(document).on("click", ".leave-cancel-btn", function() {
+  $(document).on("click", ".leave-cancel-btn", function () {
     $(this)
       .removeClass("btn btn-white leave-cancel-btn")
       .addClass("leave-edit-btn")
       .text("Edit");
-    $(this)
-      .closest("div.leave-right")
-      .find(".leave-save-btn")
-      .remove();
-    $(this)
-      .parent()
-      .parent()
-      .find("input")
-      .prop("disabled", true);
+    $(this).closest("div.leave-right").find(".leave-save-btn").remove();
+    $(this).parent().parent().find("input").prop("disabled", true);
     return false;
   });
 
-  $(document).on("change", ".leave-box .onoffswitch-checkbox", function() {
-    var id = $(this)
-      .attr("id")
-      .split("_")[1];
+  $(document).on("change", ".leave-box .onoffswitch-checkbox", function () {
+    var id = $(this).attr("id").split("_")[1];
     if ($(this).prop("checked") == true) {
       $("#leave_" + id + " .leave-edit-btn").prop("disabled", false);
       $("#leave_" + id + " .leave-action .btn").prop("disabled", false);
@@ -307,10 +277,8 @@ $(document).ready(function() {
     }
   });
 
-  $(".leave-box .onoffswitch-checkbox").each(function() {
-    var id = $(this)
-      .attr("id")
-      .split("_")[1];
+  $(".leave-box .onoffswitch-checkbox").each(function () {
+    var id = $(this).attr("id").split("_")[1];
     if ($(this).prop("checked") == true) {
       $("#leave_" + id + " .leave-edit-btn").prop("disabled", false);
       $("#leave_" + id + " .leave-action .btn").prop("disabled", false);
@@ -337,12 +305,12 @@ $(document).ready(function() {
 
   if ($(".otp-input, .zipcode-input input, .noborder-input input").length > 0) {
     $(".otp-input, .zipcode-input input, .noborder-input input")
-      .focus(function() {
+      .focus(function () {
         $(this)
           .data("placeholder", $(this).attr("placeholder"))
           .attr("placeholder", "");
       })
-      .blur(function() {
+      .blur(function () {
         $(this).attr("placeholder", $(this).data("placeholder"));
       });
   }
@@ -350,25 +318,21 @@ $(document).ready(function() {
   // OTP Input
 
   if ($(".otp-input").length > 0) {
-    $(".otp-input").keyup(function(e) {
+    $(".otp-input").keyup(function (e) {
       if (
         (e.which >= 48 && e.which <= 57) ||
         (e.which >= 96 && e.which <= 105)
       ) {
-        $(e.target)
-          .next(".otp-input")
-          .focus();
+        $(e.target).next(".otp-input").focus();
       } else if (e.which == 8) {
-        $(e.target)
-          .prev(".otp-input")
-          .focus();
+        $(e.target).prev(".otp-input").focus();
       }
     });
   }
 
   // Small Sidebar
 
-  $(document).on("click", "#toggle_btn", function() {
+  $(document).on("click", "#toggle_btn", function () {
     if ($("body").hasClass("mini-sidebar")) {
       $("body").removeClass("mini-sidebar");
       $(".subdrop + ul").slideDown();
@@ -378,7 +342,7 @@ $(document).ready(function() {
     }
     return false;
   });
-  $(document).on("mouseover", function(e) {
+  $(document).on("mouseover", function (e) {
     e.stopPropagation();
     if ($("body").hasClass("mini-sidebar") && $("#toggle_btn").is(":visible")) {
       var targ = $(e.target).closest(".sidebar").length;
@@ -393,15 +357,15 @@ $(document).ready(function() {
     }
   });
 
-  $(document).on("click", ".top-nav-search .responsive-search", function() {
+  $(document).on("click", ".top-nav-search .responsive-search", function () {
     $(".top-nav-search").toggleClass("active");
   });
 
-  $(document).on("click", "#file_sidebar_toggle", function() {
+  $(document).on("click", "#file_sidebar_toggle", function () {
     $(".file-wrap").toggleClass("file-sidebar-toggle");
   });
 
-  $(document).on("click", ".file-side-close", function() {
+  $(document).on("click", ".file-side-close", function () {
     $(".file-wrap").removeClass("file-sidebar-toggle");
   });
 
@@ -409,18 +373,14 @@ $(document).ready(function() {
     $(".kanban-wrap").sortable({
       connectWith: ".kanban-wrap",
       handle: ".kanban-box",
-      placeholder: "drag-placeholder"
+      placeholder: "drag-placeholder",
     });
   }
 });
 
 // Loader
 
-$(window).on("load", function() {
-  $("#loader")
-    .delay(100)
-    .fadeOut("slow");
-  $("#loader-wrapper")
-    .delay(500)
-    .fadeOut("slow");
+$(window).on("load", function () {
+  $("#loader").delay(100).fadeOut("slow");
+  $("#loader-wrapper").delay(500).fadeOut("slow");
 });

@@ -10,6 +10,7 @@ export default class EditLeave extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      ID: parseInt(this.props.leave.ID),
       EmpID: parseInt(this.props.leave.EmployeeID),
       ProjectID: parseInt(this.props.leave.ProjectID),
       Description: this.props.leave.ClientDescription,
@@ -53,7 +54,7 @@ export default class EditLeave extends React.Component {
    * @param user
    * @param getUser
    */
-  leaveRequest = (user, getUser) => {
+  applyLeave = (user, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
       isDisabled: true,
@@ -88,11 +89,11 @@ export default class EditLeave extends React.Component {
         // this function commented becuase it is updateing whole react table along
         // with parent component which leads to closing existing dialog
         this.setState({
-          ProjectID: 1118,
-          Description: "",
-          WorkHours: 8,
+          ProjectID: this.state.ProjectID,
+          Description: this.state.Description,
+          WorkHours: this.state.WorkHours,
           isDisabled: false,
-          StartDate: new Date(),
+          StartDate: this.state.StartDate,
           message: "Leave Edited successfully",
         });
       })
@@ -102,6 +103,52 @@ export default class EditLeave extends React.Component {
     this.setState({
       message: null,
     });
+  };
+
+  /**
+   * function takes care for editing leave request with leave validation
+   * @param user
+   * @param getUser
+   */
+  leaveRequest = (user, getUser) => {
+    const TokenId = JSON.parse(localStorage.getItem("TokenId"));
+    axios
+      .get(
+        " https://" +
+          serverUrl +
+          "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeavesByID__c?ID=" +
+          this.state.ID +
+          "&EmpID=" +
+          parseInt(user.EmpID) +
+          "&StartDate=" +
+          moment(this.state.StartDate).format("MM/DD/YYYY") +
+          "&WorkHours=" +
+          this.state.WorkHours,
+        {
+          headers: {
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.results[0].IsExist !== 1) {
+          this.applyLeave(user, getUser);
+        } else {
+          this.setState({
+            ProjectID: this.state.ProjectID,
+            Description: this.state.Description,
+            WorkHours: this.state.WorkHours,
+            isDisabled: false,
+            StartDate: this.state.StartDate,
+            message:
+              "Already leave exists for this date. Please ensure leave entry should not exceed more than 8hrs.",
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   closeEditDialog = (getUser) => {

@@ -137,12 +137,13 @@ export default class ApplyLeave extends React.Component {
           this.applyLeave(user, getUser);
         } else {
           this.setState({
-            ProjectID: 1118,
-            Description: "",
-            WorkHours: 8,
+            ProjectID: this.state.ProjectID,
+            Description: this.state.Description,
+            WorkHours: this.state.WorkHours,
             isDisabled: false,
-            StartDate: new Date(),
-            message: "Leave already exist",
+            StartDate: this.state.StartDate,
+            message:
+              "Already leave exists for this date. Please ensure leave entry should not exceed more than 8hrs.",
           });
         }
       })

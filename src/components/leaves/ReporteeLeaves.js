@@ -94,6 +94,13 @@ export default class ReporteeLeaves extends React.Component {
         filterable: false,
       },
       {
+        Header: "Work Hours",
+        accessor: "Duration",
+        className: "text-center",
+        filterable: false,
+        sortable: true,
+      },
+      {
         Header: "Status",
         accessor: "Status",
         className: "text-center",

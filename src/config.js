@@ -1,1 +1,1 @@
-export const serverUrl = "dsweb-test5a.aptify.com"; //"dsweb-test5a.aptify.com"; //"il013392.aptify.com";
+export const serverUrl = "app.aptify.com/AptifyServicesAPI"; //"dsweb-test5a.aptify.com"; //"app.aptify.com/AptifyServicesAPI";

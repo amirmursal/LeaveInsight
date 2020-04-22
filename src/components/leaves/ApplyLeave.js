@@ -267,25 +267,18 @@ export default class ApplyLeave extends React.Component {
                   </p>
 
                   <p>
-                    {
-                      /*ProjectID === "4852" ||
-                    ProjectID === "310" ||
-                    ProjectID === "5967" ||
-                    ProjectID === "5973" ||
-                    ProjectID === "5966"*/ ProjectID !==
-                      1118 ? (
-                        <span className="text-warning">
-                          Refer{" "}
-                          <a
-                            href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
-                            target="_blank"
-                          >
-                            policy{" "}
-                          </a>{" "}
-                          for Bereavement/Paternity/Maternity/Comp Off/Floater
-                        </span>
-                      ) : null
-                    }
+                    {ProjectID !== 1118 ? (
+                      <span className="text-warning">
+                        Refer{" "}
+                        <a
+                          href="https://confluence.aptify.com/display/CUL/Aptify+India+Policies+and+Procedures+Manual"
+                          target="_blank"
+                        >
+                          policy{" "}
+                        </a>{" "}
+                        for Bereavement/Paternity/Maternity/Comp Off/Floater
+                      </span>
+                    ) : null}
                   </p>
                   <div className="submit-section">
                     <button

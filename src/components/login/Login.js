@@ -118,7 +118,6 @@ export default class Login extends React.Component {
                         name="username"
                         className="form-control"
                         type="text"
-                        value={username}
                         onChange={(event) => this.handleChange(event)}
                         tabIndex="1"
                       />
@@ -133,7 +132,6 @@ export default class Login extends React.Component {
                         className="form-control"
                         name="password"
                         type="password"
-                        value={password}
                         onKeyDown={(event) =>
                           this.handleKeyDown(event, getUser)
                         }

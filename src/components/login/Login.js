@@ -12,7 +12,7 @@ export default class Login extends React.Component {
       username: "",
       password: "",
       error: false,
-      loading: false
+      loading: false,
     };
   }
 
@@ -30,9 +30,9 @@ export default class Login extends React.Component {
    * common input change handler for input and select
    * @param event
    */
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -40,26 +40,29 @@ export default class Login extends React.Component {
    * function take care for login into system
    * @param getUser
    */
-  login = getUser => {
+  login = (getUser) => {
     const { username, password } = this.state;
     const { history } = this.props;
     this.setState({
-      loading: true
+      loading: true,
     });
+
+    const formData = new FormData();
+    formData.append("UserName", username);
+    formData.append("Password", password);
+
     axios
-      .get(
+      .post(
         "https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/Authentication/Login/DomainWithContainer?UserName=" +
-          username +
-          "&Password=" +
-          password
+          "/AptifyServicesAPI/services/Authentication/Login/DomainWithContainer",
+        formData
       )
-      .then(response => {
+      .then((response) => {
         this.setState({
           username: "",
           password: "",
-          loading: false
+          loading: false,
         });
         if (response.data !== null) {
           localStorage.setItem("UserId", JSON.stringify(response.data.UserId));
@@ -74,16 +77,16 @@ export default class Login extends React.Component {
             username: "",
             password: "",
             error: true,
-            loading: false
+            loading: false,
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({
           username: "",
           password: "",
           error: true,
-          loading: false
+          loading: false,
         });
         console.log(error);
       });
@@ -116,7 +119,7 @@ export default class Login extends React.Component {
                         className="form-control"
                         type="text"
                         value={username}
-                        onChange={event => this.handleChange(event)}
+                        onChange={(event) => this.handleChange(event)}
                         tabIndex="1"
                       />
                     </div>
@@ -131,8 +134,10 @@ export default class Login extends React.Component {
                         name="password"
                         type="password"
                         value={password}
-                        onKeyDown={event => this.handleKeyDown(event, getUser)}
-                        onChange={event => this.handleChange(event)}
+                        onKeyDown={(event) =>
+                          this.handleKeyDown(event, getUser)
+                        }
+                        onChange={(event) => this.handleChange(event)}
                         tabIndex="2"
                       />
                     </div>

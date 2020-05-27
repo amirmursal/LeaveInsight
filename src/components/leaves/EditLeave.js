@@ -61,7 +61,6 @@ export default class EditLeave extends React.Component {
     });
     let data = {
       ID: parseInt(this.props.leave.ID),
-      EntityName: "Employee Work Schedules",
       Type: "Project",
       Status: "Applied",
       EmployeeID: parseInt(user.EmpID),
@@ -72,10 +71,10 @@ export default class EditLeave extends React.Component {
       EndDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
     };
     axios
-      .post(
+      .put(
         " https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {

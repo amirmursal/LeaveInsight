@@ -94,14 +94,13 @@ export default class MyLeaves extends React.Component {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(leave),
-      EntityName: "Employee Work Schedules",
       Status: "Availed",
     };
     axios
-      .post(
+      .put(
         " https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {

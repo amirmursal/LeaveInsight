@@ -59,7 +59,6 @@ export default class ApplyLeave extends React.Component {
     });
     let data = {
       ID: -1,
-      EntityName: "Employee Work Schedules",
       Type: "Project",
       Status: "Applied",
       EmployeeID: parseInt(user.EmpID),
@@ -73,7 +72,7 @@ export default class ApplyLeave extends React.Component {
       .post(
         " https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {

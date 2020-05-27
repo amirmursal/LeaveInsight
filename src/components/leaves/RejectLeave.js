@@ -31,15 +31,14 @@ export default class RejectLeave extends React.Component {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(this.props.leave),
-      EntityName: "Employee Work Schedules",
       Status: "Rejected",
       StatusDescription: this.state.StatusDescription,
     };
     axios
-      .post(
+      .put(
         " https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/GenericEntity/SaveData",
+          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {

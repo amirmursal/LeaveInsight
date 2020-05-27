@@ -12,25 +12,26 @@ export default class DeleteLeave extends React.Component {
 
   deleteLeave = (leaveid, getUser) => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    let data = {};
     axios
-      .post(
+      .delete(
         " https://" +
           serverUrl +
-          "/AptifyServicesAPI/services/DeleteRecord?EntityID=1676&RecordID=" +
-          parseInt(leaveid),
-        data,
+          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
+
         {
           headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId
-          }
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+          },
+          data: {
+            ID: parseInt(leaveid),
+          },
         }
       )
-      .then(response => {
+      .then((response) => {
         getUser();
         this.props.toggleDeleteLeaveDialog();
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };

@@ -53,6 +53,7 @@ export default class ApplyLeave extends React.Component {
    * @param getUser
    */
   applyLeave = (user, getUser) => {
+    const description = this.state.Description.trim();
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
       isDisabled: true,
@@ -63,7 +64,7 @@ export default class ApplyLeave extends React.Component {
       Status: "Applied",
       EmployeeID: parseInt(user.EmpID),
       ProjectID: this.state.ProjectID,
-      Description: this.state.Description,
+      Description: description,
       WorkHours: this.state.WorkHours,
       StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
       EndDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
@@ -262,6 +263,14 @@ export default class ApplyLeave extends React.Component {
                       <span className="text-danger">{message}</span>
                     ) : (
                       <span className="text-success">{message}</span>
+                    )}
+                  </p>
+
+                  <p>
+                    {Description.trim().length < 10 && (
+                      <span className="text-warning">
+                        Description text should be more than 10 charactors
+                      </span>
                     )}
                   </p>
 

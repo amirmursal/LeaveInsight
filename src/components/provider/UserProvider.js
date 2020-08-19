@@ -8,7 +8,7 @@ export default class UserProvider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
     };
   }
 
@@ -31,17 +31,16 @@ export default class UserProvider extends React.Component {
           UserId,
         {
           headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId
-          }
+            AptifyAuthorization: "DomainWithContainer " + TokenId,
+          },
         }
       )
-      .then(response => {
-        console.log(response.data.Employee[0]);
+      .then((response) => {
         this.setState({
-          user: response.data.Employee[0]
+          user: response.data.Employee[0],
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -51,7 +50,7 @@ export default class UserProvider extends React.Component {
       <UserContext.Provider
         value={{
           user: this.state.user,
-          getUser: this.getUser
+          getUser: this.getUser,
         }}
       >
         {this.props.children}

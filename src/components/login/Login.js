@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { serverUrl } from "../../config";
 import { UserConsumer } from "../provider/UserProvider";
-//import logo from "../../assests/images/logo.png";
 import Loader from "../common/Loader";
 
 export default class Login extends React.Component {

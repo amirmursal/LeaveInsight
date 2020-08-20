@@ -61,8 +61,8 @@ export default class ApplyLeave extends React.Component {
     let data = {
       ID: -1,
       Type: "Project",
-      Status: "Applied",
-      EmployeeID: parseInt(user.EmpID),
+      Status: this.props.leaveid ? "Availed" : "Applied",
+      EmployeeID: parseInt(this.props.leaveid ? this.props.leaveid : user.EmpID),
       ProjectID: this.state.ProjectID,
       Description: description,
       WorkHours: this.state.WorkHours,
@@ -72,8 +72,8 @@ export default class ApplyLeave extends React.Component {
     axios
       .post(
         " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
+        serverUrl +
+        "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {
@@ -114,17 +114,18 @@ export default class ApplyLeave extends React.Component {
    * @param getUser
    */
   leaveRequest = (user, getUser) => {
+
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     axios
       .get(
         " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeaves__c?EmpID=" +
-          parseInt(user.EmpID) +
-          "&StartDate=" +
-          moment(this.state.StartDate).format("MM/DD/YYYY") +
-          "&WorkHours=" +
-          this.state.WorkHours,
+        serverUrl +
+        "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeaves__c?EmpID=" +
+        parseInt(this.props.leaveid ? this.props.leaveid : user.EmpID) +
+        "&StartDate=" +
+        moment(this.state.StartDate).format("MM/DD/YYYY") +
+        "&WorkHours=" +
+        this.state.WorkHours,
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
@@ -262,8 +263,8 @@ export default class ApplyLeave extends React.Component {
                     {message && message !== "Leave applied successfully" ? (
                       <span className="text-danger">{message}</span>
                     ) : (
-                      <span className="text-success">{message}</span>
-                    )}
+                        <span className="text-success">{message}</span>
+                      )}
                   </p>
 
                   <p>

@@ -3,9 +3,29 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Loader from "../common/Loader";
 import { UserConsumer } from "../provider/UserProvider";
+import ApplyLeave from "../leaves/ApplyLeave";
 
 export default class MyTeam extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      leaveid: null,
+    };
+  }
+
+  /**
+   * function takes care for toggle apply leave dialog
+   */
+  toggleApplyLeaveDialog = (id) => {
+    this.setState({
+      isOpen: !this.state.isOpen,
+      leaveid: id
+    });
+  };
+
   render() {
+    const { isOpen, leaveid } = this.state;
     const columns = [
       {
         Header: "Employee",
@@ -45,6 +65,26 @@ export default class MyTeam extends React.Component {
         className: "text-center",
         filterable: false,
       },
+      {
+        Header: "Actions",
+        id: "Actions",
+        accessor: (d) => d.Status,
+        sortable: false,
+        filterable: false,
+        className: "text-center",
+        Cell: (props) => {
+          return (
+            <React.Fragment>
+              <button
+                className="btn btn-success btn-sm m-r-5"
+                onClick={() => this.toggleApplyLeaveDialog(props.original.ID)}
+              >
+                <i className="fa fa-plus m-r-5"></i> Apply Leave
+              </button>
+            </React.Fragment >
+          );
+        },
+      },
     ];
     return (
       <UserConsumer>
@@ -78,8 +118,19 @@ export default class MyTeam extends React.Component {
                 </div>
               </div>
             </div>
+            {isOpen && (
+              <React.Fragment>
+                <ApplyLeave
+                  open={isOpen}
+                  leaveid={leaveid}
+                  toggleApplyLeaveDialog={() => this.toggleApplyLeaveDialog()}
+                />
+                <div className="modal-backdrop fade show"></div>
+              </React.Fragment>
+            )}
           </div>
         )}
+
       </UserConsumer>
     );
   }

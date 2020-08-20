@@ -23,26 +23,28 @@ export default class UserProvider extends React.Component {
   getUser = () => {
     const UserId = JSON.parse(localStorage.getItem("UserId"));
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    axios
-      .get(
-        " https://" +
+    if (UserId && TokenId) {
+      axios
+        .get(
+          " https://" +
           serverUrl +
           "/AptifyServicesAPI/services/GetEmployeeInformation/" +
           UserId,
-        {
-          headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId,
-          },
-        }
-      )
-      .then((response) => {
-        this.setState({
-          user: response.data.Employee[0],
+          {
+            headers: {
+              AptifyAuthorization: "DomainWithContainer " + TokenId,
+            },
+          }
+        )
+        .then((response) => {
+          this.setState({
+            user: response.data.Employee[0],
+          });
+        })
+        .catch((error) => {
+          console.log(error);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    }
   };
 
   render() {

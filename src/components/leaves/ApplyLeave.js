@@ -267,9 +267,9 @@ export default class ApplyLeave extends React.Component {
                   </p>
 
                   <p>
-                    {Description.trim().length < 10 && (
+                    {Description.length < 10 && (
                       <span className="text-warning">
-                        Description text should be more than 10 charactors
+                        Description text must be 10 charactor long
                       </span>
                     )}
                   </p>

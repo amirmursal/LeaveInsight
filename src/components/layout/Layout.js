@@ -18,23 +18,25 @@ export default class Layout extends React.Component {
 
   isTokenValid = () => {
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
-    axios
-      .get(
-        " https://" +
+    if (TokenId) {
+      axios
+        .get(
+          " https://" +
           serverUrl +
           "/AptifyServicesAPI/services/UserInformation/",
-        {
-          headers: {
-            AptifyAuthorization: "DomainWithContainer " + TokenId,
-          },
-        }
-      )
-      .then((response) => {})
-      .catch((error) => {
-        console.log(error);
-        localStorage.removeItem("TokenId");
-        this.props.history.push("/login");
-      });
+          {
+            headers: {
+              AptifyAuthorization: "DomainWithContainer " + TokenId,
+            },
+          }
+        )
+        .then((response) => { })
+        .catch((error) => {
+          console.log(error);
+          localStorage.removeItem("TokenId");
+          this.props.history.push("/login");
+        });
+    }
   };
 
   render() {
@@ -69,7 +71,7 @@ export default class Layout extends React.Component {
         </UserConsumer>
       </div>
     ) : (
-      <Login history={this.props.history} />
-    );
+        <Login history={this.props.history} />
+      );
   }
 }

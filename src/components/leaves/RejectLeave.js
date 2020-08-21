@@ -28,17 +28,18 @@ export default class RejectLeave extends React.Component {
    * @param getUser
    */
   rejectLeaveRequest = (getUser) => {
+    const StatusDescription = this.state.StatusDescription.trim();
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     let data = {
       ID: parseInt(this.props.leave),
       Status: "Rejected",
-      StatusDescription: this.state.StatusDescription,
+      StatusDescription: StatusDescription,
     };
     axios
       .put(
         " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
+        serverUrl +
+        "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {
@@ -54,6 +55,16 @@ export default class RejectLeave extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  /**
+  * Disable Enter key for creating bad json format
+  * @param event
+  */
+  handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
   };
 
   render() {
@@ -100,6 +111,9 @@ export default class RejectLeave extends React.Component {
                       value={StatusDescription}
                       onChange={this.handleChange}
                       maxLength="200"
+                      onKeyDown={(event) =>
+                        this.handleKeyDown(event)
+                      }
                     ></textarea>
                   </div>
                   <div className="submit-section">

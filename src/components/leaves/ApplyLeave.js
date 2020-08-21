@@ -153,6 +153,16 @@ export default class ApplyLeave extends React.Component {
       });
   };
 
+  /**
+  * Disable Enter key for creating bad json format
+  * @param event
+  */
+  handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
   render() {
     const {
       StartDate,
@@ -257,6 +267,9 @@ export default class ApplyLeave extends React.Component {
                       value={Description}
                       onChange={this.handleChange}
                       maxLength="200"
+                      onKeyDown={(event) =>
+                        this.handleKeyDown(event)
+                      }
                     ></textarea>
                   </div>
                   <p>

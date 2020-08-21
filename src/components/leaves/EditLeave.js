@@ -50,11 +50,23 @@ export default class EditLeave extends React.Component {
   };
 
   /**
+* Disable Enter key for creating bad json format
+* @param event
+*/
+  handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  };
+
+
+  /**
    * function takes care for applying leave request
    * @param user
    * @param getUser
    */
   applyLeave = (user, getUser) => {
+    const description = this.state.Description.trim();
     const TokenId = JSON.parse(localStorage.getItem("TokenId"));
     this.setState({
       isDisabled: true,
@@ -65,7 +77,7 @@ export default class EditLeave extends React.Component {
       Status: "Applied",
       EmployeeID: parseInt(user.EmpID),
       ProjectID: this.state.ProjectID,
-      Description: this.state.Description,
+      Description: description,
       WorkHours: this.state.WorkHours,
       StartDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
       EndDate: moment(this.state.StartDate).format("MM/DD/YYYY"),
@@ -73,8 +85,8 @@ export default class EditLeave extends React.Component {
     axios
       .put(
         " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/EmployeeWorkSchedules",
+        serverUrl +
+        "/AptifyServicesAPI/services/EmployeeWorkSchedules",
         data,
         {
           headers: {
@@ -114,15 +126,15 @@ export default class EditLeave extends React.Component {
     axios
       .get(
         " https://" +
-          serverUrl +
-          "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeavesByID__c?ID=" +
-          this.state.ID +
-          "&EmpID=" +
-          parseInt(user.EmpID) +
-          "&StartDate=" +
-          moment(this.state.StartDate).format("MM/DD/YYYY") +
-          "&WorkHours=" +
-          this.state.WorkHours,
+        serverUrl +
+        "/AptifyServicesAPI/services/DataObjects/spValidateEmployeeLeavesByID__c?ID=" +
+        this.state.ID +
+        "&EmpID=" +
+        parseInt(user.EmpID) +
+        "&StartDate=" +
+        moment(this.state.StartDate).format("MM/DD/YYYY") +
+        "&WorkHours=" +
+        this.state.WorkHours,
         {
           headers: {
             AptifyAuthorization: "DomainWithContainer " + TokenId,
@@ -258,14 +270,17 @@ export default class EditLeave extends React.Component {
                       value={Description}
                       onChange={this.handleChange}
                       maxLength="200"
+                      onKeyDown={(event) =>
+                        this.handleKeyDown(event)
+                      }
                     ></textarea>
                   </div>
                   <p>
                     {message && message !== "Leave Edited successfully" ? (
                       <span className="text-danger">{message}</span>
                     ) : (
-                      <span className="text-success">{message}</span>
-                    )}
+                        <span className="text-success">{message}</span>
+                      )}
                   </p>
                   <p>
                     {ProjectID !== 1118 ? (
